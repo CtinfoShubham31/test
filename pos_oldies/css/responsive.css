@@ -1,0 +1,33 @@
+
+/********************* media query*******************************/
+
+@media (max-width:992px) {
+
+}
+@media (max-width:768px) {
+body {
+	font-size:12px !important;
+}
+section {
+	padding:20px 0;
+}
+.gutter-none {
+	padding-left:15px!important;
+	padding-right:15px!important;
+}
+.right-none {
+	padding-right:15px!important;
+}
+.left-none {
+	padding-left:15px!important;
+}
+
+
+}
+
+@media (max-width:480px) { 
+body {
+	font-size:11px !important;
+}
+
+}

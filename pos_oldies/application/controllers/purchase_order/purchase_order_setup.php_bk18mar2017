@@ -1,0 +1,205 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+class Purchase_order_setup extends MY_Controller {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library('form_validation');
+        $this->load->helper(array('form','checklogin'));
+        //$this->load->model(array('common_model','user_model'));
+        if(!isAdminLogin()) { 
+            redirect($this->config->base_url().'home/homepage/logout');
+        }
+        
+    }
+    
+    
+    public function manage_purchase_order(){
+        $this->layout->title('Purchase Order');  /*----Tab Title------*/
+        
+        $this->layout->css('css/bootstrap-datetimepicker.min.css'); 
+        $this->layout->css('css/jquery-ui.css');
+        //$this->layout->css('css/chosen.css');
+        
+        $this->layout->js('js/moment-with-locales.js'); 
+        $this->layout->js('js/bootstrap-datetimepicker.min.js');
+        //$this->layout->js('js/jquery.validate.js');
+        $this->layout->js('js/jquery-ui.min.js');
+        //$this->layout->js('js/chosen.jquery.js');
+        $this->layout->js('js/jquery.validate.js');
+        $this->layout->js('js/custom/purchase_order.js');
+        
+        $this->load->model(array('inventory_stock_model','purchase_order_model','company_model'));
+        
+        $admin_id = $this->session->userdata('pos_adminid');
+        $company_id = $this->session->userdata('pos_companyid');
+        
+        $data['unit_lists'] = $this->inventory_stock_model->allUnitLists();
+        
+        $data['stock_lists'] = $this->purchase_order_model->getStockNameUsingCompanyId($company_id);
+        
+        $company_data = $this->company_model->getCompanyUsingCompanyId($company_id);
+        $company_name = strtoupper(substr($company_data->name, 0, 3));
+        
+        $i=0;
+        if($this->input->post()){
+            $this->form_validation->set_rules('vendor','Vendor name','required|max_length[80]|xss_clean|trim');
+            $this->form_validation->set_rules('order_date','Order Date', 'required|trim');
+            
+            if($this->form_validation->run() == FALSE){
+                $this->layout->view('purchase_order/manage_purchase_order',$data);
+            }
+            else{
+            
+                $vendor_name = trim($this->input->post('vendor'));
+                $vid = trim($this->input->post('vid'));
+
+                $check_vendor_existance = $this->purchase_order_model->getSingleVendorDetails($company_id,'',$vendor_name);
+                if(empty($check_vendor_existance)){
+                    $vendor_data = array(
+                        'vendor_name'=>$vendor_name,
+                        'company_id'=>$company_id
+                    );
+
+                    $vid = $this->purchase_order_model->addVendor($vendor_data);   //ADD New Vendor.
+                }else{
+                    $vid = $check_vendor_existance->vendor_id;
+                }
+            
+                $purchase_data = array(
+                    'company_id'=>$company_id,
+                    'vendor_id'=>$vid,
+                    'purchase_order_date'=>date("Y-m-d H:i:s",strtotime(trim($this->input->post('order_date')))),
+                    'purchase_order_payment_status_id'=>2,          //Unpaid
+                    'purchase_order_status_id'=>1,  //Ordered
+                );
+            
+                $purchase_order_id = $this->purchase_order_model->addPurchaseOrder($purchase_data);
+            
+                $order_no = $company_name.'-'.$purchase_order_id;
+                $update_orderno = array('purchase_order_no'=>$order_no); 
+            
+                $this->purchase_order_model->updatePurchaseOrder($update_orderno,$purchase_order_id,$company_id);   //Add and update purchase order number.
+            
+                if(!empty($_POST['stk_id'])){
+                    foreach($_POST['stk_id'] as $stock_data){
+                        $pdata = array(
+                            'inventory_stock_id'=>$stock_data,
+                            'company_id'=>$company_id,
+                            'rate'=>$_POST['rate'][$i],
+                            'qty'=>$_POST['qty'][$i],
+                            'amount'=>$_POST['total'][$i],
+                            'unit_id'=>$_POST['unit'][$i],
+                            'purchase_order_id'=>$purchase_order_id,
+                            'purchase_order_no'=>$order_no
+                        );
+
+                        $this->purchase_order_model->addPurchaseOrderTransaction($pdata);   //Add data into purchase order transaction table
+
+                        $i++;
+                    }
+                }
+            
+                redirect($this->config->base_url().'purchase_order/purchase_order_setup/manage_purchase_order');
+                //print_r($_POST);die('ZZZ');
+            }
+        }else{
+        
+            $this->layout->view('purchase_order/manage_purchase_order',$data);
+        }
+        
+    }
+    
+    public function addmore_tablerow(){
+        $company_id = $this->session->userdata('pos_companyid');
+        if($this->input->post() && $company_id){
+            
+            $this->load->model(array('purchase_order_model','inventory_stock_model'));
+            
+            $errors = array();
+            $data = array();
+            
+            $stock_id = trim($this->input->post('stock_id')); 
+            $qty = trim($this->input->post('qty'));
+            $rate = trim($this->input->post('rate'));
+            $unit = trim($this->input->post('unit'));
+            $total = trim($this->input->post('total'));
+            
+            $stock_info = $this->purchase_order_model->getSingleInventoryStockInfo($stock_id,$company_id);
+            
+            $unit_info = $this->inventory_stock_model->unitInfo($unit);
+            
+            if (empty($stock_id)){
+                $errors['wrong'] = 'This field is required.';
+            } elseif ($stock_id) {
+                if(empty($stock_info)){
+                    $errors['stock'] = 'This stock is not exists.';
+                }
+            }
+            if (empty($rate)) {
+                $errors['rate'] = 'This field is required.';
+            }
+            if (empty($unit)) {
+                $errors['unit'] = 'This field is required.';
+            }
+            if (empty($total)) {
+                $errors['total'] = 'This field is required.';
+            }
+            if (empty($qty)) {
+                $errors['qty'] = 'This field is required.';
+            }
+            
+            if (!empty($errors)) {
+                $data['errors']  = $errors;
+                echo json_encode($data);
+            } else {
+                $data['errors']  = '';
+                
+                $stock_name = $stock_info->product_name;
+                $unit_name = $unit_info->unit;
+                
+                $data['success'] = array('stock_name'=>$stock_name,'stock_id'=>$stock_id,'qty'=>$qty,'rate'=>$rate,'unit_name'=>$unit_name,'unit_id'=>$unit,'total'=>$total);
+                echo json_encode($data);
+            }
+            
+            
+        }
+    }
+    
+    public function get_stock(){
+        if ($this->input->post()) {
+            $company_id = $this->session->userdata('pos_companyid');
+            //$term = trim($_GET['term']);
+            $term = addslashes($this->input->post('data', TRUE));
+
+            $this->load->model(array('purchase_order_model'));
+
+            $stock_details = $this->purchase_order_model->getStockNameUsingCompanyId($company_id,$term);
+
+            echo json_encode($stock_details);
+        }
+    }
+
+
+    public function get_vendor(){
+        if ($this->input->post()) {
+            $company_id = $this->session->userdata('pos_companyid');
+            //$term = trim($_GET['term']);
+            $term = addslashes($this->input->post('data', TRUE));
+
+            $this->load->model(array('purchase_order_model'));
+
+            $vendor_details = $this->purchase_order_model->getVendorDetails($company_id,$term);
+
+//            if(!empty($vendor_details)){
+//                foreach($vendor_details as $vdata){
+//                    //$return_array[] = array('vendor_id'=>$vdata->vendor_id,'vendor_name'=>$vdata->vendor_name);
+//                    $return_array[] = array($vdata->vendor_name);
+//                }
+//            }
+
+           // echo json_encode($return_array);
+             echo json_encode($vendor_details);
+        }
+    }
+    
+}

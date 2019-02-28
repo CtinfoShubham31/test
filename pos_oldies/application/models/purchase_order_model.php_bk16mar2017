@@ -1,0 +1,138 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Purchase_order_model extends CI_Model {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
+    public function getStockNameUsingCompanyId($company_id,$term=''){
+        $this->db->select('inventory_stock_id,product_name');
+        $this->db->from('pos_inventory_stock');
+        
+        if($company_id){
+            $this->db->where('company_id',$company_id);
+        }
+        if($term){
+            //$this->db->like('vendor_name',$term,'after');
+            $this->db->like('product_name',$term);
+        }
+        
+        $this->db->order_by('product_name');
+        $query = $this->db->get();
+        //echo $this->db->last_query(); die('SS');
+        if($query->num_rows()>0)
+        {
+            $row = $query->result();
+            return $row;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public function addVendor($data){
+        $this->db->insert('pos_vendor',$data);
+        $insert_id = $this->db->insert_id();
+        return $insert_id;
+    }
+    
+    public function getVendorDetails($company_id,$term=''){
+        $this->db->select('vendor_id,vendor_name,company_id');
+        $this->db->from('pos_vendor');
+        
+        if($company_id){
+            $this->db->where('company_id',$company_id);
+        }
+        if($term){
+            //$this->db->like('vendor_name',$term,'after');
+            $this->db->like('vendor_name',$term);
+        }
+        
+        $this->db->order_by('vendor_name');
+        $query = $this->db->get();
+        //echo $this->db->last_query(); die('SS');
+        if($query->num_rows()>0)
+        {
+            $row = $query->result();
+            return $row;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public function getSingleVendorDetails($company_id,$vendor_id='',$vendor_name=''){
+        $this->db->select('vendor_id,vendor_name,company_id');
+        $this->db->from('pos_vendor');
+        
+        if($company_id){
+            $this->db->where('company_id',$company_id);
+        }
+        if($vendor_id){
+            $this->db->where('vendor_id',$vendor_id);
+        }
+        if($vendor_name){
+            $this->db->where('vendor_name',$vendor_name);
+        }
+        
+        $query = $this->db->get();
+        //echo $this->db->last_query(); die('SS');
+        if($query->num_rows()>0)
+        {
+            $row = $query->row();
+            return $row;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+    public function getSingleInventoryStockInfo($stock_id,$company_id){
+        $this->db->select('inventory_stock_id,product_name');
+        $this->db->from('pos_inventory_stock');
+        
+        if($company_id){
+            $this->db->where('company_id',$company_id);
+        }
+        if($stock_id){
+            $this->db->where('inventory_stock_id',$stock_id);
+        }
+        
+        
+        $query = $this->db->get();
+        //echo $this->db->last_query(); die('SS');
+        if($query->num_rows()>0)
+        {
+            $row = $query->row();
+            return $row;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public function addPurchaseOrder($data) {
+        $this->db->insert('pos_purchase_order',$data);
+        $insert_id = $this->db->insert_id();
+        return $insert_id;
+    }
+    
+    public function updatePurchaseOrder($updatedata,$purchase_order_id,$company_id){
+        $this->db->where('purchase_order_id', $purchase_order_id);
+        $this->db->where('company_id',$company_id);
+        $this->db->update('pos_purchase_order', $updatedata); 
+    }
+    
+    public function addPurchaseOrderTransaction($data){
+        $this->db->insert('pos_purchase_order_transaction',$data);
+        $insert_id = $this->db->insert_id();
+        return $insert_id;
+    }
+    
+}

@@ -1,0 +1,542 @@
+body {
+/*	overflow-x: hidden;*/
+	font-family: 'robotolight', Helvetica, Arial, sans-serif;
+	font-size:14px;
+	line-height: 1.42857143;
+	color: #202020;
+	background-color: #fff
+}
+
+p {
+	font-family: 'robotolight';
+	line-height:24px;
+	color:#929292;
+	font-size:1.1em;
+}
+
+a {
+	color: #202020;
+	cursor:pointer;
+ }
+a, a:hover, a:focus, a:active, a.active {
+	outline: 0;
+	text-decoration:none;
+}
+.gutter-none {
+	padding-left:0px!important;
+	padding-right:0px!important;
+}
+.padding-none {
+	padding-left:0px!important;
+	padding-right:0px!important;
+}
+.right-none {
+	padding-right:0px!important;
+}
+.left-none {
+	padding-left:0px!important;
+}
+h1, h2, h3, h4, h5 {
+	font-family: 'robotoregular';
+}
+strong {
+	font-family: 'robotobold';
+}
+section {
+	float:left;
+	width:100%;
+	padding:40px 0;
+}
+.body-bg {
+	float:left;
+	width:100%;
+	background:url(../img/bg-img.jpg) no-repeat center center;
+        background-size:cover;
+	height:100vh;
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#333333+0,202020+69,202020+100 */
+ 
+
+}
+.login-header {
+	padding:15px 0px;
+}
+.login-area {
+	margin:5% auto;
+	max-width:300px;
+}
+.form-control.sign-control {
+	background-color:rgba(255, 255, 255, 0.1);
+	color:#999;
+	outline:none;
+	height:48px;
+	border:none;
+}
+.form-control.sign-control.textarea-control {
+	height:auto !important;
+}
+.form-control.sign-control:focus {
+	border:1px solid #ff9416;
+}
+.btn-full {
+	width:100%;
+}
+.login-area hr {
+	border-top:1px solid #424242;
+	margin-top:30px;
+	margin-bottom:30px;
+}
+.login-area hr:after {
+    content: "Or";
+    background: #424242;
+    position: absolute;
+    color: #fff;
+    left: 49%;
+    border-radius: 50%;
+    padding: 5px;
+    width: 32px;
+    height: 32px;
+    margin-top: -16px;
+    line-height: 24px;
+    text-align: center;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.content-area {
+	float:left;
+	width:100%;
+	margin-top:2%;
+}
+.form-sec h1 {
+	font-size:2.0em;
+	margin:10px 0px 20px 0;
+}
+/************* set pin css start *************/
+.pincode-input-container {
+    display: inline-block;
+    width: 70%;
+    vertical-align: middle;
+}
+.pincode-input-container input.first {
+	border-top-right-radius:0px;
+	border-bottom-right-radius:0px;
+}
+.pincode-input-container input.last {
+	border-top-left-radius:0px;
+	border-bottom-left-radius:0px;
+	border-left-width:0px;
+}
+.pincode-input-container input.mid {
+	border-radius:0px;
+	border-left-width:0px;
+}
+.pincode-input-text, .form-control.pincode-input-text {
+    width: 25%;
+    float: left;
+    background: #333;
+    border: 1px solid #808080;
+	text-align:center;
+}
+.pincode-input-text:focus {
+	background:#222;
+	border:1px solid #808080;
+}
+.pincode-input-error{
+	clear:both;
+}
+
+.pincode-input-container.touch .touchwrapper{
+	position:relative;
+	height:34px;
+	margin-right:5px;
+	overflow:hidden;
+}
+.pincode-input-container.touch .touchwrapper .pincode-input-text{
+	position: absolute;
+    top: 0px;
+    left: 0px;
+    right:0px;
+    width: 100%;
+    display: block;
+    background-color:transparent;
+    background:transparent;
+    letter-spacing:20px;
+}
+/*
+	On every digit we use the letter-spacing of the above textbox to determine the table background
+*/
+.pincode-input-container.touch .touchwrapper.touch1{width:40px;}
+.pincode-input-container.touch .touchwrapper.touch2{width:65px;}
+.pincode-input-container.touch .touchwrapper.touch3{width:90px;}
+.pincode-input-container.touch .touchwrapper.touch4{width:120px;}
+.pincode-input-container.touch .touchwrapper.touch5{width:150px;}
+.pincode-input-container.touch .touchwrapper.touch6{width:175px;}
+
+
+.pincode-input-container.touch .touchwrapper .touchtable{
+	width: 100%;
+    height: 100%;
+    table-layout:fixed;
+}
+.pincode-input-container.touch .touchwrapper .touchtable td{
+	border-right:1px solid #ccc;
+}
+.pincode-input-container.touch .touchwrapper .touchtable td.last{
+	border-right:0;
+}
+/************ set pin end **************/
+.address-sec {
+	float:left;
+	width:100%;
+	margin-top:20px;
+}
+.address-area {
+	float:left;
+	width:100%;
+	border:1px solid #565656;
+	padding:15px;
+	background:#2b2b2b;
+	margin-bottom:20px;
+}
+.address-area p {
+	margin:0px 5px;
+}
+.edit-area {
+	margin-top:15px;
+}
+.modal-footer.footer-center {
+	text-align:center;
+}
+.btn.address-btn {
+	background:none;
+	border:1px solid #565656;
+	outline:none;
+	color:#929292;
+	padding:6px 32px;
+	border-radius:0px;
+	min-width:120px;
+}
+.btn.address-btn:hover {
+	background:#222;
+}
+.percent-icon {
+	color: #929292;
+    line-height: 42px;
+    font-size: 18px;
+}
+.table-bg {
+	background:#424242;
+	border:1px solid #565656;
+	color:#929292;
+}
+.table-bg>thead>tr>th {
+	background:#222;
+}
+.table-bg>tbody>tr:hover {
+	background:#3d3d3d;
+}
+.table-bg>tbody>tr>td a i {
+	color:#929292;	
+	}
+/********************* new css add here 9-2-17 **********************/
+
+/********************* checkbox css start here **********************/
+.badgebox
+{
+    opacity: 0;
+}
+
+.badgebox + .badge
+{
+    /* Move the check mark away when unchecked */
+    text-indent: -999999px;
+    /* Makes the badge's width stay the same checked and unchecked */
+    width: 27px;
+}
+
+.badgebox:focus + .badge
+{
+    /* Set something to make the badge looks focused */
+    /* This really depends on the application, in my case it was: */
+    
+    /* Adding a light border */
+    box-shadow: inset 0px 0px 5px;
+    /* Taking the difference out of the padding */
+}
+
+.badgebox:checked + .badge
+{
+    /* Move the check mark back when checked */
+	text-indent: 0;
+}
+.btn-success.checkbox-btn .badge {
+	background-color:#fff !important;
+	color:#5cb85c;
+	width: 36px;
+    height: 22px;
+    font-size: 16px;
+}
+.btn-default.checkbox-btn .badge {
+	background-color:#fff !important;
+	color:#ff9416;
+	width: 36px;
+    height: 22px;
+    font-size: 16px;
+	
+}
+.btn-danger.checkbox-btn .badge {
+	background-color:#fff !important;
+	color:#d43f3a;
+	width: 36px;
+    height: 22px;
+    font-size: 16px;
+	
+}
+.btn-success.checkbox-btn, .btn-default.checkbox-btn, .btn-danger.checkbox-btn {
+	padding:5px;
+	text-transform:uppercase;
+	margin-bottom:10px;
+	border-radius:20px;
+}
+
+/*Date:01mar2017*/
+
+.form-control.control-left {
+    display: inline-block;
+    width: 85%;
+    
+}
+.remove_field i.fa.fa-times {
+    color: #ff3838 !important;
+    font-size: 20px;
+    padding-left: 10px;
+}
+.plus-icon {
+    color: #5cb85c;
+    padding: 10px 5px;
+    font-size: 18px;
+
+}
+.minus-icon {
+    color: #f00;
+    padding: 10px 5px;
+    font-size: 18px;
+
+}
+.group-bottom {
+    float:left;
+}
+.error_msg, .email_error {
+color:rgb(255, 67, 67);
+}
+.location-maker {
+    font-size: 18px!important;
+    
+}
+.btn-success.checkbox-btn.simple-check {
+    background-color: rgba(68, 157, 68, 0);
+    border-color: rgba(57, 132, 57, 0);
+    min-width:auto !important;
+    padding:0px !important;
+    margin-bottom:0px !important;
+}
+.simple-badgebox {
+    display:none;
+}
+.simple-badge {
+    border-radius:4px!important; 
+}
+.total-txt span {
+    background-color:#ff5729;
+    border-color: #ff5729;
+    color: #fff;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    margin-bottom:10px;
+
+}
+/****** new css 30-3-17 ************/
+.chart-wrap {
+    position: relative;
+    padding-bottom:60%;
+    height:auto;
+	margin-bottom:30px;
+}
+
+.chart-flexible {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width:100% !important;
+    height:100% !important;
+}
+
+.top-space {
+	margin-top:28px;
+}
+.line-space {
+    line-height: 14px;
+}
+.bottom-space {
+    margin-bottom: 0px;
+}
+
+select.form-control.sign-control option { 
+    background-color:#424242!important;
+    -webkit-background-color:#424242!important;
+    -moz-background-color:#424242!important; 
+    background:#424242!important; 
+    color:#929292;
+}
+
+select.form-control.sign-control option.bg-color:hover {
+    background-color:#000!important;
+    -webkit-background-color:#000!important;
+    -moz-background-color:#000!important; 
+    background:#000!important; 
+    color:#fff;
+}
+
+.stictobottom {
+	position: absolute;
+    bottom: 20px;
+	display:none !important;
+    }
+
+.chart-fix {
+	position: absolute;
+    bottom: 20px;
+    background: #424242;
+    display: inline-block!important;
+    width: 100%;
+    z-index: 1;
+    left:0;
+    bottom: 0px;
+    padding: 0% 0 10% 19%;
+}
+ #axis_hide1 div, #axis_hide2 div, #axis_hide3 div {
+	 float:left !important;
+	 width:19% !important;
+	 padding-top:5%;
+	 border-top: 1px solid #333;
+ }
+ 
+.goog-tooltip {
+    color:#202020 !important;
+}
+
+/*success message*/
+.box_alert {
+    width:30%;
+    background:green;
+    position:absolute;
+    top:10px;
+    right:15px;
+    padding:15px 15px;
+    color:#fff;
+    text-align:center;
+    font-size:16px;
+    z-index: 99999;
+    opacity:0.9;
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -ms-border-radius:4px;
+    -o-border-radius:4px;
+    -webkit-border-radius:4px;
+    transition:all .3s linear;
+    -moz-transition:all .3s linear;
+    -ms-transition:all .3s linear;
+    -o-transition:all .3s linear;
+    -webkit-transition:all .3s linear;
+    cursor:pointer;
+}
+.box_alert:hover {
+    opacity:10;
+}
+.right_sign{
+    font-size: 25px;
+}
+
+.box_alert-new {
+    background: green none repeat scroll 0 0;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    left: 10%;
+    opacity: 0.9;
+    padding: 10px 15px;
+    position: absolute;
+    right: 10%;
+    text-align: center;
+    top: -10px;
+    transition:all .3s linear;
+    -moz-transition:all .3s linear;
+    -ms-transition:all .3s linear;
+    -o-transition:all .3s linear;
+    -webkit-transition:all .3s linear;
+    width: 80%;
+    z-index: 99999;
+}
+.box_alert-new:hover {
+    opacity:10;
+}
+
+
+.btn_radius{
+    min-width: 150px !important;
+    text-transform: capitalize !important;
+}
+
+/*Login page spinner*/
+
+
+/******* css end *********/
+.for_loader {
+    position: absolute; left: 47%; top:35%; z-index: 99999;
+}
+@media (min-width:1201px) and (max-width:1366px) {
+    .for_loader {
+    left: 43%; top:40%;
+}
+}
+@media (min-width:1025px) and (max-width:1200px) {
+    .for_loader {
+    left: 43%; top:40%;
+}
+}
+@media (min-width:901px) and (max-width:1024px) {
+    .for_loader {
+    left: 42%; top:40%;
+}
+}
+@media (min-width:768px) and (max-width:900px) {
+    .for_loader {
+    left: 41%; top:40%;
+}
+}
+@media (min-width:701px) and (max-width:767px) {
+    .for_loader {
+    left: 40%; top:40%;
+}
+}
+@media (min-width:601px) and (max-width:700px) {
+    .for_loader {
+    left: 37%; top:40%;
+}
+}
+@media (min-width:501px) and (max-width:600px) {
+    .for_loader {
+    left: 35%; top:40%;
+}
+}
+@media (min-width:421px) and (max-width:500px) {
+    .for_loader {
+    left: 32%; top:40%;
+}
+}
+@media (min-width:320px) and (max-width:420px) {
+    .for_loader {
+    left: 27%; top:40%;
+}
+}
