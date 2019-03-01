@@ -16,7 +16,7 @@ class Common {
             echo json_encode($response);
             die;
         }
-        if(empty($_POST['authkey']) || $_POST['authkey'] != "df094c0342bd72c64733012bc2b810a1"){
+        if(empty($_POST['authkey']) || $_POST['authkey'] != "asas"){
             $response['status'] = 0;
             $response['response'] = 'Not Authorized';
             echo json_encode($response);
@@ -35,7 +35,7 @@ class Common {
             echo json_encode($response);
             die;
         }
-        else if(empty($data['authkey']) || $data['authkey'] != "df094c0342bd72c64733012bc2b810a1"){
+        else if(empty($data['authkey']) || $data['authkey'] != "asas"){
             $response['status'] = 0;
             $response['response'] = 'Not Authorized';
             echo json_encode($response);
