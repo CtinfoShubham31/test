@@ -1,0 +1,17 @@
+label {
+    display:inline-block;
+    width:100px;
+}
+
+input[type=text], input[type=email], textarea{
+    width:300px;
+    padding: 5px;
+}
+
+.ng-valid[required], .ng-valid.required {
+    border: 2px solid #42a948;
+}
+
+.ng-invalid:not(form){
+    border: 2px solid #a94442;
+}

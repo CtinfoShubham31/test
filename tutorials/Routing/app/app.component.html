@@ -1,0 +1,16 @@
+<h1>{{message}}</h1>
+
+
+<button (click)="student()">Student Status</button>
+
+<nav>
+        <a [routerLink]="['/student']">Student</a> <br/>
+        <a [routerLink]="['/studentdetails']">Student Details</a> <br/>
+        <a [routerLink]="['/pagenot']">Page Not</a> <br/>
+	    <a [routerLink]="['/departments']" routerLinkActive="active">Departments</a>
+
+</nav>
+
+<div>
+    <router-outlet></router-outlet>
+</div>

@@ -614,6 +614,210 @@ Also called a permanent cookie, or a stored cookie, a cookie that is stored on a
 
 ===============================================================================
 
+include() function does not stop execution , just give warning and continues to execute the script in case of file name not found i..e missing/misnamed files .
+
+require() function gives fatal error if it founds any problem like file not found or misnamed files and stops the execution once get fatal error.
+====================================================================================
+# SESSION and COOKIE
+
+SESSION => Data stored on server
+COOKIE => Cookies Data Stored on clide side or user`s browser.
+
+SESSION => Session Data more secure because they never travel on every HTTP Request.
+COOKIE => Cookies Data are less secure because they travel with each and every HTTP Request.
+
+SESSION => You can store the objects in session(Store large amount of data).
+COOKIE => You can store only string type of data in cookies (MAX File Size-4kb)
+
+====================================================================================
+# GET and POST method
+
+GET AND POST Both are the methods of http protocols:
+Both GET and POST method is used to transfer data from client to server in HTTP protocol
+
+GET => Data are visible in the URL string as query string.
+POST => Data are not visible in the URL string as query string.
+
+1) In case of Get request, only limited amount of data can be sent because data is sent in header.	
+In case of post request, large amount of data can be sent because data is sent in body.
+
+2) Get request is not secured because data is exposed in URL bar.	
+Post request is secured because data is not exposed in URL bar.
+
+3) Get request can be bookmarked.	
+Post request cannot be bookmarked.
+====================================================================================
+# What is REST API?
+REST stands for "REpresentational State Transfer". It is a concept or architecture for managing information over the internet. 
+It is usually represented by JSON.
+
+API stands for "Application Programming Interface". It is a set of rules that allows one piece of software application to talk to another.
+
+Why do we need REST API?
+In many applications, REST API is a need because this is the lightest way to create, read, update or delete information between different applications over the internet or HTTP protocol.
+=====================================================================================
+# array_merge() Function
+The array_merge() function merges one or more arrays into one array.
+
+Note: If two or more array elements have the same key, the last one overrides the others.
+
+=> Example 1:
+
+$a1=array("red","green");
+$a2=array("blue","yellow");
+print_r(array_merge($a1,$a2));
+
+o/p => Array ( [0] => red [1] => green [2] => blue [3] => yellow )
+
+=> Example 2:
+Merge two associative arrays into one array:
+
+$a1=array("a"=>"red","b"=>"green");
+$a2=array("c"=>"blue","b"=>"yellow");
+print_r(array_merge($a1,$a2));
+
+o/p => Array ( [a] => red [b] => yellow [c] => blue )
+
+=> Example 3:
+Using only one array parameter with integer keys:
+$a=array(3=>"red",4=>"green");
+print_r(array_merge($a));
+
+o/p => Array ( [0] => red [1] => green )
+=======================================================================================
+
+# array_combine()
+The array_combine() function creates an array by using the elements from one "keys" array and one "values" array.
+
+Note: Both arrays must have equal number of elements!
+
+=> Example 1:
+
+$fname=array("Peter","Ben","Joe");
+$age=array("35","37","43");
+$c=array_combine($fname,$age);
+print_r($c);
+
+o/p => Array ( [Peter] => 35 [Ben] => 37 [Joe] => 43 )
+
+============================================================================================
+# strstr()
+The strstr() function searches for the first occurrence of a string inside another string.
+
+=> Example 1:
+echo strstr("Hello world!","world");
+
+o/p => world!
+
+======================================================================================
+# strpos()
+The strpos() function finds the position of the first occurrence of a string inside another string.
+
+=> Example 1:
+echo strpos("I love php, I love php too!","php");
+
+o/p => 7
+
+=======================================================================================
+# namespace
+
+Use for better organise of classes.
+namespace is like a folder or directory.
+
+Example 1:
+namespace def {		//def namespace
+	class xyz{
+		public function __construct(){
+			echo "XYZ from DEF namespace";
+		}
+	}
+}
+
+namespace {			//Global namespace
+	class xyz{
+		public function __construct(){
+			echo "XYZ from Global namespace";
+		}
+	}
+	
+	$obj = new xyz();	//XYZ from Global namespace
+	
+	$obj = new def\xyz(); //XYZ from DEF namespace
+}
+
+Example 2:
+
+namespace def {		//def namespace
+	class xyz{
+		public function __construct(){
+			echo "XYZ from DEF namespace";
+		}
+	}
+}
+
+namespace {			//Global namespace
+	use def\xyz;
+	
+	$obj = new xyz();	//XYZ from Global namespace
+}
+
+=======================================================================================
+
+# PHP 7 Sclar Datatype Hinting:
+1. Sclar Datatype means boolean(bool), integer(int), string all we can type hint, but before version this feature not avilable.
+
+function add(string $a, string $b){
+	return $a.$b;
+}
+
+echo add(3,'shubham');
+
+2. Return Type Declaration
+
+# Example 1:
+declare(strict_type = 1);
+ini_set('display_errors','1');
+
+function test(){
+	return [];
+	//return 45;   => int(45)
+}
+var_dump(test());
+
+o/p => array(0){}
+
+# Example 2:
+declare(strict_type = 1);
+ini_set('display_errors','1');
+
+function test() : array {
+	return [];
+	//return 45;   => int(45)
+}
+var_dump(test());
+
+o/p => array(0){}
+
+3. Null Coalesce Operator (??)
+
+Ternary operator
+$name = isset($_GET['name']) ? $_GET['name'] : 'Not Found';
+
+o/p => Not Found
+
+$name = isset($_GET['name']) ?? 'Not Found';
+
+4. Combined Comparison / Spaceship Opeartor (<=>)
+
+
+========================================================================================
+
+# To On error:
+
+ini_set('display_errors','1');
+
+========================================================================================
+
 npm install -g ionic@3.9.2
 
 
@@ -621,3 +825,4 @@ npm install -g ionic@3.9.2
 
 
 
+https://www.hipdf.com/txt-to-pdf

@@ -1,0 +1,46 @@
+<!---<p>
+  <label>Name:</label>
+  <input type="text" id="name" name="name" [formControl]="name">
+ 
+</p>
+<p>{{name.value}}</p>-->
+
+<form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+    <p>
+      <label>First Name:</label>
+      <input type="text" formControlName="firstName" required>
+    </p>
+
+    <p>
+      <label>Last Name:</label>
+      <input type="text" formControlName="lastName" required>
+    </p>
+
+    <div formGroupName="address">
+      <h3>Address</h3>
+      <p>
+        <label>Street</label>
+        <input type="text" formControlName="street" required>
+      </p>
+      <p>
+        <label>City</label>
+        <input type="text" formControlName="city" required>
+      </p>
+      <p>
+        <label>State</label>
+        <input type="text" formControlName="state" required>
+      </p>
+      <p>
+        <label>Zipcode</label>
+        <input type="text" formControlName="zipcode" required>
+      </p>
+
+      <p>
+        <label>&nbsp;</label>
+        <button type="submit" [disabled]="!customerForm.valid">Submit</button>
+      </p>
+    </div>
+</form>
+
+
+<p>{{customerForm.value | json}}</p>

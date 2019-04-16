@@ -1,0 +1,42 @@
+<div [hidden]="submitted">
+  <form #contactForm="ngForm" (ngSubmit)="onSubmit()">
+    <p>
+      <label>Name:</label>
+      <input type="text" id="name" name="name" required [(ngModel)]="contact.name" #name="ngModel">
+      <!--- <br/>{{name.className}}---> 
+      <span [hidden]="name.valid || name.pristine">This field is required</span>
+    </p>
+
+    <p>
+      <label>Phone:</label>
+      <input type="text" id="phone" name="phone" required [(ngModel)]="contact.phone">
+    </p>
+
+      <p>
+        <label>Message:</label>
+        <input type="text" id="message" name="message" required [(ngModel)]="contact.message" #message="ngModel">
+        <span [hidden]="message.valid || message.pristine">This field is required</span>
+      </p>
+
+      <p>
+          <label>&nbsp;</label>
+        <button type="submit" [disabled]="!contactForm.form.valid">Send Message</button>
+      </p>
+      
+  </form>
+</div>
+
+<div [hidden]="!submitted">
+  <p>
+    <strong>Name: </strong>{{contact.name}}
+  </p>
+  <p>
+    <strong>Phone: </strong>{{contact.phone}}
+  </p>
+  <p>
+    <strong>Message: </strong>{{contact.message}}
+  </p>
+  <p>
+      <button (click)="submitted=false;contactForm.reset()">Back</button>
+  </p>
+</div>

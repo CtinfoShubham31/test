@@ -566,13 +566,15 @@ http://javarevisited.blogspot.in/2011/11/database-transaction-tutorial-example.h
 
 SQL self join is used to join or compare a table to itself. SQL self joins are used to compare values of a column with values of another column in the same table.
 
+
+	
 SELECT 
     concat(e.firstname, e.lastname) employee,
     concat(m.firstname, m.lastname) manager
 FROM
     employees e
 INNER JOIN
-    employees m ON m.employeeid = e.reportsto;
+    employees m ON m.employeeid = e.reportsto;	
 
 http://www.zentut.com/sql-tutorial/sql-self-join/
 http://www.java67.com/2013/01/difference-between-self-and-equi-join-sql-example-inner-mysql.html

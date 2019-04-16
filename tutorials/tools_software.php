@@ -33,8 +33,6 @@ Agile project management methodology
 <?php 
 Agile Project Management (APM) is an iterative approach to planning and guiding project processes.
 
-Agile Project Management (APM) is an iterative approach to planning and guiding project processes.
-
 Just as in Agile Software Development, an Agile project is completed in small sections. These sections are called iterations. In Agile Software Development, for instance, an iteration refers to a single development cycle. Each section or iteration is reviewed and critiqued by the project team, which should include representatives of the project`s various stakeholders. Insights gained from the critique of an iteration are used to determine what the next step should be in the project.
 
 

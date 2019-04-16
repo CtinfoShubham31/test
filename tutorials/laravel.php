@@ -1,3 +1,10 @@
++++++++++++++++++++++++++++++++++++++++++++++
+# Complete Concept Of Eloquent ORM & Model
+######################################
+Online Web Tutor     Laravel v5.4
+Database: Query Builder in Laravel | use DB
++++++++++++++++++++++++++++++++++++++++++++++
+
 <?php
 
 # Via Composer Create-Project
@@ -86,6 +93,17 @@ php artisan route:list
 php artisan make:middleware LoggerMiddleware
 
 (app/Http/Middleware/LoggerMiddleware.php)
+
+# Create model
+php artisan make:model Customer
+
+# php artisan make:request TestRequest
+
+Created Request class File path: app/Http/Requests/TestRequest.php
+
+
+# Make middleware
+php artisan make:middleware test
 ?>
 
 
@@ -1354,7 +1372,7 @@ This will first rollback and then migrate it.
 *************************************
 php artisan migrate:refresh
 
-Above not run at the time of production, beacuse this command will deleted all schemas and then created again , so any user entry will become removed.
+Above do not run at the time of production, beacuse this command will deleted all schemas and then created again , so any user entry will become removed.
 *************************************
 
 # Create new column like phone no
@@ -2753,7 +2771,7 @@ Database: Query Builder in Laravel | use DB
 *************************
 If we want to use query Builder then in controller file we need to add:
 use DB
-in out controller file
+in our controller file
 *************************
 
 # Insert(Single Row) Into Table(companies)
@@ -2876,7 +2894,7 @@ use App\Product;
 
 # Now generate table using cmd
 php artisan make:migration create_products_table --create=products
---(2019_03_09_155029_create_products_table.php)---
+-------------------(2019_03_09_155029_create_products_table.php)--------------
 public function up()
     {
         Schema::create('products', function (Blueprint $table) {
@@ -2937,7 +2955,7 @@ class Product extends Model
 Now, error remove. and only name, email and description field will save into table.
 
 # Guarded property : protected $guarded = ["quantity"];
-=> those field do not want to insert then write that into guarded variable. 
+=> those field do not want to insert then write it into guarded variable. 
 protected $guarded = ["quantity"]; //quantity will not insert.
 protected $guarded = []; //All value will be inserted
 
@@ -2970,7 +2988,7 @@ class Product extends Model
 
 # Suppose we create migration file, and what happend we don`t create timestamp
 
-******************************8
+*******************************
 Command by which we can create model and table
 
 php artisan make:model Author -m
@@ -2986,6 +3004,8 @@ public function up()
 		//$table->timestamps();
 	});
 }
+
+
 
 php artisan migrate
 
@@ -3414,12 +3434,12 @@ We can says that it`s a resource controller.
 which contain following methods:
 index(), create(), store(Request $request), show($id), edit($id), update(Request $request, $id), destroy($id)
 
-Now create those rouete, which have use with our resource controller.
+Now create those route, which have use with our resource controller.
 
 Route::resource("movie","MovieController");
 
 And check by, 
-*****************************8
+*****************************
 php artisan route:list
 *****************************
 will show all routes.
@@ -4537,7 +4557,12 @@ https://www.youtube.com/watch?v=FTXUpSfFpCE&list=PLT9miexWCpPXuMenRSnpek96ncK3dX
 
 
 
+Difference Between Laravel And Codeigniter:
+<?php 
+For example : If you are an individual developer working on a project which must be delivered as fast as possible then codeigniter is best choice for you.
 
+If you are an big team. You going to build some commercial website
+?>
 
 
 
