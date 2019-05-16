@@ -55,5 +55,40 @@ class Comment_model extends CI_Model {
         //echo $this->db->last_query();die('QQQW');
         return $res;
     }
+	
+	
+	
+	
+	
+	//////////////////////////////////
+	//////////////////////////////////
+	public function getUsers(){
+        $this->db->select('*');
+        $this->db->from('users');
+        $query = $this->db->get();
+        //echo $this->db->last_query(); die('SS');
+        if($query->num_rows()>0)
+        {
+            $row = $query->result();
+            return $row;
+        }
+        else
+        {
+            return false;
+        }
+    }
+	
+	public function addUser($add_data){
+		$this->db->insert('users',$add_data);
+        $insert_id = $this->db->insert_id();
+        return $insert_id;
+	}
+	
+	
+	
+	
+	
+	
+	
     
 }

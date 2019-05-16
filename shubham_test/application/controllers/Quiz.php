@@ -171,6 +171,30 @@ class Quiz extends CI_Controller {
 	public function testing(){
 		$this->load->view('quiz/testing');
 	}
+	
+	public function formtable(){
+		$this->load->model(array('comment_model'));
+		$data['udata'] = $this->comment_model->getUsers();
+		
+		
+		$this->load->view('formtable',$data);
+	}
+	
+	public function formtsubmit(){
+		$this->load->model(array('comment_model'));
+		if($_POST){
+			//print_r($_POST);
+			$add_data = array(
+				'username'=> $_POST['username'],
+				'email'=> $_POST['email']
+			);
+			$user_id = $this->comment_model->addUser($add_data);
+			if($user_id){
+				$data['udata'] = $this->comment_model->getUsers();
+				$this->load->view('list_table',$data);
+			}
+		}
+	}
     
     
 }
