@@ -1,1 +1,55 @@
-<html>MP09CT4819</html>
+public function logout(){
+        $data = json_decode(file_get_contents('php://input'), true);
+        $responce = array("status" => array(),"responce" => array());
+        if(!isset($data) || count($data) == 0) {
+            $responce['status'] = 0;
+            $responce['responce'] = 'Invalid request';
+            echo json_encode($responce);
+            die;
+        }
+        
+        if((empty($data['authkey']) || $data['authkey'] != $this->config->item('authkey')) && (empty($data['token']))){
+            $responce['status'] = 0;
+            $responce['responce'] = 'Not Authorized';
+            echo json_encode($responce);
+            die;
+        }
+        
+        $token = $data['token'];
+        $user_id = $data['user_id'];
+        
+        $this->load->model('user_model');
+        $get_userinfo = $this->user_model->checkToken($user_id,$token);
+        
+        /*
+         * public function updateUserInfo($updatedata,$email){
+        $this->db->where('email', $email);
+        $res = $this->db->update('pos_admin', $updatedata);
+         return $res; 
+         * 
+    }
+         */
+        
+        if(!empty($get_userinfo)){
+            $updatedata = array('token'=>0);
+           
+            $res = $this->user_model->updateUserInfo($updatedata,$user_id);
+            if($res){
+                $responce['status'] = 1;
+                $responce['responce'] = '';
+                echo json_encode($responce);
+                die;
+            }else{
+                $responce['status'] = 0;
+                $responce['responce'] = 'Something went wrong.';
+                echo json_encode($responce);
+                die;
+            }
+        }else{
+            $responce['status'] = 0;
+            $responce['responce'] = 'Something went wrong.';
+            echo json_encode($responce);
+            die;
+        }
+        
+    }
