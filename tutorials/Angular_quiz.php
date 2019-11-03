@@ -2,12 +2,71 @@
 
 https://www.truecodex.com/course/angular-project-training/service-and-http-client-for-create-static-pages-angular
 *******************************************************************************
+~Interpreters and compilers
+~TypeScript
+Install Angular
+Why use angular
+Angular Command
+~Routing
+~Child Routes
+~Angular Forms
+~Observables
+~RxJS operators in angular services
+~Component Communication
+~Two way data binding:
+~Difference between angular js and angular2
+~Angular component life cycle hooks
+~Create a Custom Attribute Directive
+~Angular Error Handling
+~Cascading / Dependent Dropdown List (Country/State/City)
+~Angular - Http vs HttpClient
 
-TypeScript
+~setValue() & patchValue()
+~Router Guards
+
+~Behaviour Subject
+
+~Lazy Loading
+
+
+~Subject
+
+~ActivatedRouteSnapshot
+~RouterStateSnapshot
+~Interceptors
+
+~Angular dev build vs prod build
+
+~Angular reactive forms edit example
+
+~Async Pipe
+~Observable map()
+<?php 
+
+?>
+
+
+~Interpreters and compilers
+<?php
+The simplest definition of a compiler is a program that translates code written in a high-level programming language (like JavaScript or Java) into low-level code (like Assembly) directly executable by the computer or another program such as a virtual machine.
+
+For example, the Java compiler converts Java code to Java Bytecode executable by the JVM (Java Virtual Machine). Other examples are V8, the JavaScript engine from Google which converts JavaScript code to machine code or GCC which can convert code written in programming languages like C, C++, Objective-C, Go among others to native machine code.
+
+Interpreter directly executes the instructions in the source programming language while a compiler translates those instructions into efficient machine code
+A compiler first takes in the entire program, checks for errors, compiles it and then executes it.
+?>
+
+
+~TypeScript
 <?php
 TypeScript Code is converted into Plain JavaScript Code
 
 TypeScript is an object-oriented programming language developed and maintained by Microsoft. It is a superset of JavaScript and contains all of its elements.
+Type checking at compile time is one of the great features in Typescript.
+
+# Advantages of using TypeScript over JavaScript
+
+- TypeScript always point out the compilation errors at the time of development only. Because of this at the run-time the chance of getting errors are very less whereas JavaScript is an interpreted language.Features of TypeScript:
 
 Here is static typing(We can declare a variable in multiple ways). ex: var num : number;
 
@@ -70,7 +129,14 @@ Never see the refresh.
 - Give our applications a clean structure.(Easy to understand and easy to maintain)
 - Includes a lot of re-usable code.
 - TypeScipt code analyzer warns you about the errors as you type
-- Using TypeScript classes and interfaces makes the code more concise and easy to read and write
+- Using TypeScript classes and interfaces makes the code more concise(brief) and easy to read and write
+
+# Angular 7 is based on MVM Model view model pattern.
+# The current version of rxjs (6.3.3) is also added in angular 7.
+# Angular 7 has extended a new life-cycle hook (ngDoBootstrap)
+
+# Angular 6  use rxjs 6.0.0.
+# No more support for the <template> tag . <ng-template> tag should be used instead.
 ?>
 
 Angular Command
@@ -111,7 +177,7 @@ ng generate directive highlight
 # Event Binding ()
 
 
-Routing
+~Routing
 <?php 
 Routing is the mechanism used by angular for navigating between page and displaying appropriated component/page on browser.
 
@@ -219,6 +285,7 @@ export class AppComponent {
 }
 
 => Example (3): How to use redirection in routing
+here, pathMatch: 'full' means, that the whole URL path needs to match 
 
 const routes: Routes = [
   {
@@ -410,7 +477,7 @@ const routes: Routes = [
 
 
 
-Child Routes
+~Child Routes
 <?php 
 ng g c settings
 ng g c settings-contact
@@ -494,7 +561,7 @@ it will redirected to http://localhost:4200/settings/profile
 ?>
 
 
-Angular Forms
+~Angular Forms
 <?php 
 a.) Template driven form
 b.) Model-driven form(Reactive forms)
@@ -502,7 +569,7 @@ b.) Model-driven form(Reactive forms)
 # Template driven form
 These are called Template driven form as everything that we r going to use in an application is defined into the template that we r defining along with component.
 
-Prerequisite:
+Prerequisite(condition)शर्त:
 - We need to import FormsModule in an Application module file(i.e. app.module.ts)
 import {FormsModule} from "@angular/forms";
 
@@ -510,7 +577,6 @@ Features:
 - Two way data binding (using [(ngModel)] syntax) 
 - Minimal component code, 
 - Automatic track of the form and its data
-
 ngForm Directive keeps the track of all form control, that we create and moniter their property like value, valid, touched, dirty, pristine etc.
 
 (html)
@@ -592,6 +658,144 @@ TO CHECK IF ENTIRE FORM IS VAILD
 <div>Invalid: {{employeeForm.Invalid}}</div>
 ?>
 
+Template Driven vs Reactive Forms
+<?php 
+# Template Driven
+As the name implies, template-driven forms host most of the logic in the template code; working with a template-driven forms means to build the form in the .html template file. use a dedicated  ngForm object, related to the whole form and containing all the inputs, each one of them being accessible through their name, to perform the required validity checks.
+
+- FormsModule is required for template driven forms
+
+- Two way data binding(using [(NgModel)] syntax)
+
+- <form #myForm="ngForm" (ngSubmit) = "submitForm()">
+   #myForm="ngForm" gives us a reference to the form
+   <input type="text" [(ngModel)]="user.name" name="name" #nameField="ngModel" required />
+   <p>Name: {{user.name}}</p>
+	<p>Age: {{user.age}}</p>
+
+# Reactive Forms 
+- ReactiveFormsModule for our reactive form example.
+
+- No data binding is done
+
+- import { FormGroup, FormControl, Validators} from '@angular/forms'
+- import { FormGroup, FormControl, FormBuilder} from '@angular/forms'
+
+- myForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+    age: new FormControl('')
+  })
+  
+  <form [formGroup]="myForm" (ngSubmit) = "submitForm()">
+  <input type="text" formControlName="name" />
+  <p>Name: {{myForm.controls.name.value}}</p>
+  <p>Age: {{myForm.controls.age.value}}</p>
+  
+  -  The "myForm" property is an instance of "FormGroup" and represents the form itself.
+  
+  - "FormGroup", as the name suggests, is a container of form controls sharing the same purpose; as we can see, the "myForm" itself acts as a FormGroup, which means that we can nest FormGroup objects inside other "FormGroup"
+  
+  - Each data input element in the form template–in the preceding code, "name"–is represented by an instance of "FormControl".
+  - Also note that we have no way to access the FormControls directly, like we were doing in Template-Driven forms; we have to retrieve them using the  .get() method of the main FormGroup, which is the form itself.
+  
+- It manage form and validation from our component itself.  
+
+# Example
+----------------(app.component.ts)-------------------------
+export class AppComponent{
+	signupForm: FormGroup;
+	FirstName: string="";
+	LastName: string="";
+	Email: string="";
+	Password: string="";
+	
+	constructor(private formBuilder: FormBuilder){
+		this.signupForm = formBuilder.group({
+			fname: new FormControl(),
+			lname: new FormControl(),
+			Emailid: new FormControl(),
+			userpassword: new FormControl(),
+		});
+	}
+	
+	PostData(signForm:NgForm){
+		this.FirstName = signForm.controls.fname.value;
+		this.LastName = signForm.controls.lname.value;
+		this.Email = signForm.controls.Emailid.value;
+		this.Password = signForm.controls.userpassword.value;
+		console.log(signForm.controls);
+	}
+	
+}
+
+----------------(app.component.html)-------------------------
+<div [formGroup]='signupForm' (ngSubmit) = "PostData(signupForm)">
+	<div class="form-group">
+		<input type="text" formControlName="fname">
+	</div>
+	<div class="form-group">
+		<input type="text" formControlName="lname">
+	</div>
+	<div class="form-group">
+		<input type="text" formControlName="Emailid">
+	</div>
+	<div class="form-group">
+		<input type="text" formControlName="userpassword">
+	</div>
+	
+	<input type="submit" value="Post Data">
+</div>
+
+# Reactive form with validation
+
+----------------(app.component.ts)-------------------------
+- import { FormGroup, FormControl, FormBuilder, validators} from '@angular/forms'
+
+export class AppComponent{
+	signupForm: FormGroup;
+	FirstName: string="";
+	LastName: string="";
+	Email: string="";
+	Password: string="";
+	
+	constructor(private formBuilder: FormBuilder){
+		this.signupForm = formBuilder.group({
+			fname: ['',Validators.required],
+			lname: ['',Validators.required, Validators.maxLength(10)],
+			Emailid: ['',Validators.required, Validators.email],
+			userpassword: ['',Validators.required],
+		});
+	}
+	
+	PostData(signupForm:NgForm){
+		this.FirstName = signupForm.controls.fname.value;
+		this.LastName = signupForm.controls.lname.value;
+		this.Email = signupForm.controls.Emailid.value;
+		this.Password = signupForm.controls.userpassword.value;
+		console.log(signupForm.controls);
+	}
+	
+}
+
+----------------(app.component.html)-------------------------
+<div [formGroup]='signupForm' (ngSubmit) = "PostData(signupForm)">
+	<div class="form-group">
+		<input type="text" formControlName="fname">
+		<span *ngFor="signupForm.control['fname'].haserror(required)">
+			First name required !
+		</span>
+	</div>
+	<input type="submit" [disabled] = '!signupForm.valid' value="Post Data">
+</div>
+
+----------------(app.component.css)-------------------------
+input.ng-invalid.ng-touched{
+	border-color:red;
+}
+
+# FormGroup
+?>
+
 Service
 <?php
 
@@ -650,12 +854,16 @@ export class EmployeeListComponent{
  
 ?>
 
-Observables
+***************************************
+By default, ajax is asynchronous call, you can make it as synchronous call by using async: false. Asynchronous ajax call allow the next line of code to execute, but synchronous call stop JavaScript execution until the response from server.
+***************************************
+
+~Observables
 <?php
 observables to handle HTTP requests
 Observables help you manage asynchronous data, such as data coming from a backend service.To use observables, Angular uses a third-party library called Reactive Extensions (RxJS). Observables are a proposed feature for ES 2016, the next version of JavaScript.
 
-To deal with data asynchronously use Observables
+To deal with data asynchronously use Observables.
 
 # Difference between Promises and Observables:
 (1) Promises emits single value
@@ -664,9 +872,222 @@ Observables emits multiple value over a period of time
 (2) Promises cannot be cancel
 Observables can be cancelled by using the unsubscibe() method
 
+(3) Promise Not Lazy
+Observable is Lazy. An observable is not called untill we subscribe to the observable. 
+
+
+getBookListFromStore():Observable<Book[]>{
+	return this.http.get<Book[]>(this.bookUrl);
+}
+
+- Observable is a class of Rxjs library.
+- Observable provide support for passing messages between publishers and subscribers in any application.
+- Observable provides support event handling, asynchronous programming and handling multiple values.
+- Some method of observable class are subscribe, map , mergeMap, switchMap, exhaustMap, debounceTime, of, retry, catch, throw etc.
+- Observable are not executed until its subscribed.
+
+Example:
+Category function return an observable which the AppComponent is going to subscribe to, like so: 
+
+import {Observable} from 'rxjs';
+
+---------
+---------
+search(term:string):Observable<Categories[]>{
+	
+}
+
+// The return type is Observable<Categories[]>, it`s going to return an observable where each item in the observable is Categories[]
+
+# Promise:
+- Promises work with asynchronous operation and they either run  us a single value (i.e. promise resolve) Or an error message(i.e. promise reject).
+- Another important thing to remember regarding promises is that a request initiated from a promises is not cancellable. What if we want to retry a failed call?
+
+# Example: Promise
+ ---------------(app.component.ts)-------------
+export class AppComponent{
+	private results = [];
+	constructor(private http: HttpClient){}
+	
+	priavte search(term:any){
+		console.log(term);
+		this.http.get(`https://restcountries.eu/rest/v2/name/${term}`).toPromise()
+		.then((data: any) => {
+			console.time('request-length');
+			console.log(data);
+			console.timeEnd('request-length');
+			this.results = data;
+		});
+	}
+}
+
+
+---------------(app.component.html)-------------
+<input #term type="text" (keyup)="search(term.value)">
+<hr>
+<div *ngIf="results.length > 0">
+	<li *ngFor = "let result of results">
+		{{result.name}}
+	</li>
+</div>
+
+# Example: Observable
+
+---------------(app.component.html)-------------
+<input [formControl="term"]>
+<hr>
+<div *ngIf="results.length > 0">
+	<li *ngFor = "let result of results">
+		{{result.name}}
+	</li>
+</div>
+
+ ---------------(app.component.ts)-------------
+export class AppComponent{
+	private results = [];
+	constructor(private http: HttpClient){}
+	
+	private term = new FormControl();
+	
+	ngOnInit(term:any){
+		this.term.valueChanges
+		.debounceTime(400)					//cancel request for 4 sec.
+		.distinctUntilChanged()
+		.subscribe(searchTerm => {
+			this.http.get(`https://restcountries.eu/rest/v2/name/${searchTerm}`).subscribe((data:any) => {
+				debugger;
+				
+				console.time('request-length');
+				console.log(data);
+				console.timeEnd('request-length');
+				this.results = data;
+			})
+		})
+		
+		
+	}
+}
+
+===================================================
+
+- With a Promise you can only handle one event.
+- With an Observable you can handle multiple events.
+
+
+# Observable and Rxjs
+1) Make the http call from EmpService
+2) Receive the observable
+3) Subscribe to the observable
+4) Assign the Emp Data to local variable in view
+
+# Promise
+- promise emits a single value
+- A promise is Not Lazy
+- A Promise cannot be cancelled
+- Observable is Lazy. The "Observable" is slow. It isn`t called until we are subscribed to it. 
+- An Observable can be cancelled by using the unsubscribe() method
+- An addition Observable provides many powerful operators like map, foreach, filter, reduce, retry, retryWhen etc.
+ 
+
+For example: 
+
+const numberPromise = new Promise((resolve) => {
+    resolve(5);
+    resolve(10);
+});
+
+numberPromise.then(value => console.log(value));
+// still prints only 5
+------------------------------------------------------------------------------------------------------
+# Observable: 
+Emits multiple values over a period of time
+
+For example:
+
+const numberObservable = new Observable((observer) => {
+    observer.next(5);
+    observer.next(10);
+});
+
+numberObservable.subscribe(value => console.log(value));
+// prints 5 and 10
+------------------------------------------------------------------------------------------------------
+
+# Rxjs
+Reactive extension for javascript
+- External Library to work with Observable
+
+ngOnInit() {
+	new Observable( observer => {
+		setTimeout( () => {
+			observer.next(1);
+		}, 1000);
+		
+		setTimeout( () => {
+			observer.next(2);
+		}, 5000);
+		
+		setTimeout( () => {
+			observer.complete();
+		}, 6000);
+		
+	}).subscribe(value => {
+		console.log(value)
+	}, error => {
+		console.log(error)
+	})
+	
+	
+}
+
+
+
+
+
 ?>
 
-Component Communication
+~RxJS operators in angular services
+<?php 
+//RxJS 5
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
+import {catchError} from 'rxjs/operators/catchError';
+
+new ErrorObservable('Your error message');
+// OR
+ErrorObservable.create('Your error message');
+
+//RxJS 6
+import {Observable, Subject, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+
+return throwError('your error message');
+
+=> npm install -g json-server
+
+=> db.json
+
+# Fake rest api server
+=> json-server --watch db.json
+
+# import {ISkill} from './ISkill';
+export interface IEmployee{
+	id: number;
+	fullName: string;
+	email: string;
+	phone?: number;
+	contactPreference: string;
+	skills: ISkill[];
+}
+
+export interface ISkill{
+	skillName: string;
+	experienceInYears: number;
+	proficiency: string;
+}
+?>
+
+~Component Communication
 <?php
 # How to pass data from Parent to Child Component using Input properties 
 Our application will have a counter which is incremented by the Parent Component. The Parent Component then passes this counter to the child component for display in its template.
@@ -783,7 +1204,7 @@ export class ChildComponent implements OnInit {
 
 
 # How to pass data from Child to Parent using @Output properties(EventEmitter) 
-Child component exposes an event emitter property with which emit event when something happening. and parent bind to event property and reacts to those events. So thit event emitter nothing it is an output property.
+Child component exposes an event emitter property with which emit event when something happening. and parent bind to event property and reacts to those events. So this event emitter nothing it is an output property.
 First step is to import EventEmitter and Output from the angular core.
 
 
@@ -815,7 +1236,7 @@ export class EmpParent
 
 ?>
 
-Two way data binding:
+~Two way data binding:
 <?php
 Two way data binding is the combination of both Property binding and Event binding.
 using [(ngModel)] directive.
@@ -856,7 +1277,7 @@ Entered values: HI {{data}}
 
 ?>
 
-Difference between angular js and angular2
+~Difference between angular js and angular2
 <?php
 Angular 2 is not an upgrade of Angular 1 but it is completely rewritten.
 Angular 2 uses TypeScript which is a superset of JavaScript
@@ -865,7 +1286,7 @@ Angular 2 is entirely component based. Controllers and $scope are no longer used
 
 ?>
 
-Angular component life cycle hooks
+~Angular component life cycle hooks
 <?php
 > Create the component
 > Renders the component
@@ -944,7 +1365,7 @@ export class SimpleComponent implements OnChanges {
 
 ?>
 
-Create a Custom Attribute Directive
+~Create a Custom Attribute Directive
 <?php 
 # Example 1.
 
@@ -996,7 +1417,7 @@ export class HighlightDirective {
 
 ?>
 ====================================================================================
-# Angular Error Handling:
+~Angular Error Handling:
 <?php 
 When we use httpclient service to call a server side service error may occur.when they do occur we need to handle this.
 
@@ -1036,7 +1457,7 @@ getEmployee():Observable<Employee[]>{
 ?>
 ====================================================================================
 
-Cascading / Dependent Dropdown List (Country/State/City)
+~Cascading / Dependent Dropdown List (Country/State/City)
 <?php 
 https://www.truecodex.com/course/angular-6/cascading-or-dependent-dropdown-list-country-state-city-in-angular-6-7
 
@@ -1182,7 +1603,7 @@ export class CreateAccountComponent implements OnInit {
 
 ?>
 
-Angular - Http vs HttpClient
+~Angular - Http vs HttpClient
 <?php 
 If the Angular version is greater than 4.3 we can use the new HttpClient which has some interesting changes.
 
@@ -1213,6 +1634,53 @@ Interceptors allow us to intercept or mutate HTTP requests and responses. An int
 The new HttpClient allows for capturing progress events such as the Upload and Download progress events. In order to access such events, the HttpRequest needs to be created manually:
 
 ?>
+=======================================================================================================
+# There many RxJS operators such as:
+
+https://angular.io/guide/rx-library
+
+# Pipes: Combining Multiple Operators
+<?php
+.pipe method which is a member of the RxJS Observable for chaining operators
+You can use the pipe() function/method to combine multiple Operators. For example:
+
+import { filter, map } from 'rxjs/operators';
+const squareOf2 = of(1, 2, 3, 4, 5,6)
+  .pipe(
+    filter(num => num % 2 === 0),
+    map(num => num * num)
+  );
+squareOf2.subscribe( (num) => console.log(num));
+
+The of() method will create and return an Observable from the 1, 2, 3, 4, 5,6 numbers and the pipe() method will apply the filter() and map() operators on each emitted value.
+?>
+
+1) Pipes in Angular: A pipe takes in data as input and transforms it to the desired output
+https://angular.io/guide/pipes
+
+2) pipe() function in RxJS: You can use pipes to link operators together. Pipes let you combine multiple functions into a single function.
+
+The pipe() function takes as its arguments the functions you want to combine, and returns a new function that, when executed, runs the composed functions in sequence.
+https://angular.io/guide/rx-library (search for pipes in this URL, you can find the same)
+
+
+# Using the map() Operator
+<?php
+Map’s job is to transform things.
+The map() operator is similar to the Array.map() method. It lets you map observable responses to other values. For example:
+
+import { Observable} from 'rxjs';
+import { map } from 'rxjs/operators';
+getItems(): Observable> {
+  return this.aService.getItems().pipe(map(response => response.data));
+}
+
+The getItems() method returns an Observable. We`re using the map() operator to return the data property of the response object.
+
+The operator enables us to map the response of the Observable stream to the data value.
+
+We import the pipeable operator map() from the rxjs/operators package and we use the pipe() method (which takes a variable number of pipeable operators) to wrap the operator.
+?>
 
 Angular catchError
 <?php 
@@ -1239,11 +1707,6 @@ various types of Observables such as:
 ?>
 
 # Remember, operators always return observables.
-
-Map
-<?php
-Map’s job is to transform things
-?>
 
 examples of some popular operators such as tap(), map(), filter(), share()
 <?php 
@@ -1281,12 +1744,52 @@ this.bookService.getStdNames().pipe(
 .subscribe(names=> names.forEach(name => console.log(name))); 
 ?>
 
-Observable and map
+================================================================================================
+~setValue() & patchValue() 
 <?php 
+In this blog, I will explain the difference between setValue() and patchValue() which are frequently used in Angular2 reactive forms. 
+ 
+Updating Form controls from a model is very easy and flexible in Reactive Form API of Angular v2. So, setValue() and patchValue() are the methods by which we can update the Reactive forms controls from our model. Let us see the difference between these two in the following example.
+ 
+# setValue()
+ 
+setValue() will set the value of all form controls of the form group.  
+
+    this.profileForm = new FormGroup({  
+      
+		FirstName: new FormControl(''),  
+		LastName: new FormControl(''),  
+		UserName: new FormControl(''),  
+		Email: new FormControl(''),  
+		MobileNumber: new FormControl('')  
+      
+    })   
+	
+	We have the above FormGroup controls. Now, we will use setValue() methods to update all FormControl values. 
+
+    profileForm.setValue({  
+		"FirstName":"Ajay",  
+		"LastName":"Panda",  
+		"UserName":"ajay33",  
+		"Email":"ajay.panda@gmail.com",  
+		"MobileNumber":"8745212589"  
+    });   
+	
+	As you can see from the above code, setValue() method will set all fromcontrol values from model. If you do not mention any of the formcontrol values in model, then it will throw an exception.
+	
+# patchValue() 
+patchValue() method will also set Formcontrol values from a model but only for those which we have mentioned in the model. So,  it is not necessary to pass all the model info in patchValue() method. 
+
+    profileForm.patchValue({    
+		"FirstName":"Ajay",    
+		"LastName":"Panda"  
+    });   
+
+As you can see from the above code, I am only passing two properties to my formgroup control, so patchValue() will set these two properties in form. Unlike to setValue(), it is not necessary to pass all models, we can only pass required models to the from group control.
 
 ?>
-
-Router Guards 
+=================================================================================================
+~Router Guards 
 => https://www.youtube.com/watch?v=mt0VFlqrW6k
 => https://codecraft.tv/courses/angular/routing/router-guards/#_canactivate
 <?php
@@ -1315,39 +1818,252 @@ Checks to see if a user can visit a routes children.
 # CanDeactivate
 Checks to see if a user can exit a route.
 https://www.youtube.com/watch?v=WveRq-tlb6I
-?>
 
-ActivatedRouteSnapshot
-<?php 
+# Resolve
 
-?>
+# CanLoad
 
-RouterStateSnapshot
-<?php 
+# Example
+=> ng g guard auth
+=> ng g guard guards/auth
+Inject the guard in "app.moule.ts" 
+import { Authguard } from './guards/auth-guard'
+providers : [Authguard]
 
-?>
+----------(app-routing.module.ts)------------
+News route is protected by auth guard.  if auth guard canAactivate function return true then only can go to news route. if return false then can not access news route.
 
-
-Using Observable with AsyncPipe
-<?php 
-Angular AsyncPipe subscribes to Observable and returns the emitted data. For example. Let`s suppose we have this method:
-
-getItems(): Observable {
-  this.items$ = this.httpClient.get(this.itemUrl);
+{
+	path : 'news',
+	component : NewsComponent,
+	canAactivate: [Authguard],
+	childern : [
+		{
+			path: 'latest',
+			component: LatestComponent	
+		},
+		{
+			path: 'upcoming',
+			component: UpcomingComponent
+		}
+	]
 }
-The items$ variable is of type Observable`.
 
-After calling the getItems() method on the component we can use the async pipe in the component template to subscribe to the returned Observable:
+# Role based routing guard
+
+CanActivate function return true or false. Or it can be observable or promise but in boolean form.
+CanDeactivate, Try to leave the page.
+
+=> ng g module project --routing
+
+# Angular Lazy Load Routing with Route Guards Part-1
+https://www.youtube.com/watch?v=nH2S2LV8k0I
+
+
+
 ?>
+
+~ActivatedRouteSnapshot
+<?php 
+
+?>
+
+~RouterStateSnapshot
+<?php 
+
+?>
+
+
+
 
 [innerHTML]
 <?php 
 <div class="blog-desc" [innerHTML]="blog.description"></div>
 ?>
 
-AuthInterceptor
+~Interceptors
 <?php 
+# Interceptors: 
+https://ryanchenkie.com/angular-authentication-using-the-http-client-and-http-interceptors
+https://www.tektutorialshub.com/angular/angular-httpclient-http-interceptor/  -------(good)
+https://www.stackchief.com/tutorials/HTTP%20Interceptor%20Angular  --------(good)
+https://codinglatte.com/posts/angular/building-http-interceptor-angular-5/  --------(good)
+https://www.codingforentrepreneurs.com/blog/jwt-token-interceptor-for-http-angular/
 
+http://www.angulartutorial.net/2018/03/set-headers-for-all-http-request-using.html  --------(good)
+http://www.angulartutorial.net/2018/03/catch-all-http-errors-using.html   --------(good)
+
+Interceptors provide a mechanism to intercept and/or mutate outgoing requests or incoming responses. They are very similar to the concept of middleware with a framework like Express,
+
+The HttpInterceptor interface provides an easy way to modify the incoming/outgoing HTTP requests in Angular. You can implement the HttpInterceptor interface to modify request headers, cache requests, log information, and more.
+
+# Use Of Interceptors
+- Ensure the outgoing request is https instead of http.
+- Set an authorization header on each request.
+- We can create a global error catch in case http request fail.
+
+
+
+
+# Example 1.
+Lets create a class called authentication , authheader  for authenticating the for sending authenticating header for each time when you send the request.
+
+---------(/opt/lampp/htdocs/angtest/src/app/http-interceptors/auth-header-interceptor.ts)--------------
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
+
+@Injectable()
+
+export class AuthHeaderInterceptor implements HttpInterceptor {
+    intercept(request: HttpRequest<any>, next: HttpHandler){
+        return next.handle(request);
+    }
+}
+
+=> ng g s Test
+
+Attach extra header for authorization, So interceptors comes in.
+
+---------------(/opt/lampp/htdocs/angtest/src/app/http-interceptors/index.ts)-----------------
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthHeaderInterceptor } from './auth-header-interceptor';
+
+export const httpInterceptProviders = [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthHeaderInterceptor, multi: true }
+];
+
+
+--------(/opt/lampp/htdocs/angtest/src/app/http-interceptors/auth-header-interceptor.ts)-------------
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
+
+@Injectable()
+
+export class AuthHeaderInterceptor implements HttpInterceptor {
+
+    intercept(request: HttpRequest<any>, next: HttpHandler){
+        console.log('Auth Intercept Provider'); 
+        console.log(request.url);  
+        const authToken = "My Auth Token";
+        const authReq = request.clone({
+            setHeaders: { Authorization: authToken }
+        }); 
+        //return next.handle(request);
+        return next.handle(authReq);
+    }
+
+}
+
+----------------(/opt/lampp/htdocs/angtest/src/app/test.service.ts)-------------
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TestService {
+
+  constructor(private http: HttpClient) { }
+
+  fetch(){
+    return this.http.get("https://jsonplaceholder.typicode.com/todos/1");
+  }
+}
+
+
+-----------------(/opt/lampp/htdocs/angtest/src/app/app.component.html)-------------------
+<button (click)="fetch()">Fetch</button>
+
+<router-outlet></router-outlet>
+
+
+-------------------(/opt/lampp/htdocs/angtest/src/app/app.component.ts)---------------------
+import { Component } from '@angular/core';
+import { TestService } from './test.service';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'HttpInterceptDemo';
+
+  constructor(private testService:TestService){}
+
+  fetch(){
+    this.testService.fetch().subscribe(data => console.log(data));
+  }
+}
+
+
+------------------(/opt/lampp/htdocs/angtest/src/app/app.module.ts)--------------------
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptProviders } from './http-interceptors';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule
+  ],
+  providers: [httpInterceptProviders],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+=============================================================================
+
+# Example 2.
+--------------------(app.service.ts)------------------
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AppService {
+
+  constructor(private http: HttpClient) { }
+
+  getAllPosts(){
+    return this.http.get("https://jsonplaceholder.typicode.com/posts");
+  }
+}
+
+--------------------(app.component.ts)------------------
+import { Component } from '@angular/core';
+import { AppService } from './app.service';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'HttpInterceptDemo';
+
+  constructor(private appService:AppService){}
+
+  ngOnInit(){
+    this.appService.getAllPosts().subscribe(data => console.log(data));
+  }
+}
+
+
+Http Requests, Interceptors, Error Handling & more [Angular Series]
+
+=============================================================
+
+# Example 3.
 ?>
 
 HttpBackend 
@@ -1355,14 +2071,585 @@ HttpBackend
 
 ?>
 
+AOT(Ahead-Of-Time) VS JIT(Just-in-Time) Compilation
+<?php 
+An Angular application consists mainly of components and their HTML templates. Because the components and templates provided by Angular cannot be understood by the browser directly, Angular applications require a compilation process before they can run in a browser.
+
+The Angular Ahead-of-Time (AOT) compiler converts your Angular HTML and TypeScript code into efficient JavaScript code during the build phase before the browser downloads and runs that code. Compiling your application during the build process provides a faster rendering in the browser.
+
+This guide explains how to specify metadata and apply available compiler options to compile your applications efficiently using the AOT compiler.
+
+Angular offers two ways to compile your application:
+
+> Just-in-Time (JIT), which compiles your app in the browser at runtime.
+> Ahead-of-Time (AOT), which compiles your app at build time.
+
+JIT compilation is the default when you run the ng build (build only) or ng serve (build and serve locally) CLI commands:
+
+
+ng build
+ng serve
+For AOT compilation, include the --aot option with the ng build or ng serve command:
+
+ng build --aot
+ng serve --aot
+
+# Why compile with AOT?
+Faster rendering
+
+With AOT, the browser downloads a pre-compiled version of the application. The browser loads executable code so it can render the application immediately, without waiting to compile the app first.
+
+Fewer asynchronous requests
+
+The compiler inlines external HTML templates and CSS style sheets within the application JavaScript, eliminating separate ajax requests for those source files.
+
+Smaller Angular framework download size
+
+There`s no need to download the Angular compiler if the app is already compiled. The compiler is roughly half of Angular itself, so omitting it dramatically reduces the application payload.
+
+Detect template errors earlier
+
+The AOT compiler detects and reports template binding errors during the build step before users can see them.
+
+Better security
+
+AOT compiles HTML templates and components into JavaScript files long before they are served to the client. With no templates to read and no risky client-side HTML or JavaScript evaluation, there are fewer opportunities for injection attacks.
+
+(AoT Compilation is the process of compiling components and their HTML templates during a build process, so that the application, its components and their templates are converted to executable JavaScript code before the browser renders them.The AoT compilation is done by the Angular compiler.)
+?>
+
 ************************************************************************************************
 <a routerLink="./" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
 <a routerLink="./blogs" routerLinkActive="active">Blogs</a>
 <a [routerLink]="['/login']">Logout</a>
 ************************************************************************************************
+=================================================================================================
+~Lazy Loading
+<?php 
+In Lazy loading only that module or component is loaded which is required on that point of time, this makes an application very fast and economic on memory consumption factors.
+Lazy loading helps us to download the web pages in chunks instead of downloading everything in a big bundle.
+To implement the Lazy Loading in Angular we need to create a routing module and a module.ts file for the component we need to lazy load.
+
+- Lazy loading helps decrease load time (faster download speeds).
+- Modules are loaded on demand.
+- Modules are loaded when the user navigates to their routes.
+- Lazy loading decreases resources consumption (lower resource costs).
+- Lazy loading doesn’t load everything once, it loads only what the user expects to see first.
+
+Lazy loading may prove helpful when the application grows and have a number of components, this design makes application loading fast.
+
+https://www.techiediaries.com/angular-routing-lazy-loading-loadchildren/
+https://dev.to/saigowthamr/how-to-implement-lazy--loading-in-angular-6-3ple
+https://medium.com/@thiago.reis/how-to-implement-lazy-loading-in-angular-c8dcbf165561
+https://alligator.io/angular/lazy-loading/
+http://www.advancesharp.com/blog/1233/angular-6-lazy-loading-with-demo
+https://angularfirebase.com/lessons/how-to-lazy-load-components-in-angular-4-in-three-steps/
+https://blog.angular-university.io/angular2-ngmodule/
+https://www.freakyjolly.com/angular-6-lazy-loading-example/		-------------------(Good Example)
+ 
+
+# Example 1
+
+(app.module.ts)
+
+import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
+
+------------------------------------------------------------------
+(app-routing.module.ts)
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+
+const routes: Routes = [
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: 'home', component: HomeComponent},
+  {path: 'lazy', loadChildren: './lazy/lazy.module#LazyModule'}
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+-------------------------------------------------------
+(app.component.html)
+<nav >
+  <a routerLink="home">Home Component</a>
+  <a routerLink="lazy" >Lazy Module</a>
+</nav>
+<div id="content">
+  <router-outlet></router-outlet>
+</div>
+---------------------------------------------------------------
+(app/lazy/lazy-routing.module.ts)
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { SobreComponent } from './sobre/sobre.component';
+
+const routes: Routes = [
+  {path: '', component: SobreComponent}
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class LazyRoutingModule { }
+---------------------------------------------------------
+
+(app/lazy/lazy.module.ts)
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { LazyRoutingModule } from './lazy-routing.module';
+import { SobreComponent } from './sobre/sobre.component';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    LazyRoutingModule
+  ],
+  declarations: [SobreComponent]
+})
+export class LazyModule { }
+
+=====================================================================================
+# Example 2
+=> ng g module admin --flat --routing
+=> ng g module user --flat --routing
+
+-----------(app-routing.module.ts)-------------
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+
+const routes: Routes = [
+  { 
+    path: '',
+	component: HomeComponent
+  },
+  { 
+    path: 'admin',
+	loadChildren: './admin/admin.module#AdminModule'
+  },
+  { 
+    path: 'user',
+	loadChildren: './user/user.module#UserModule'
+  },
+  {path: '**', redirectTo: '/', pathMatch: 'full'}
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
 
 
-Angular dev build vs prod build
+
+-----------(user-routing.module.ts)-------------
+
+
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { UserComponent } from './user.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { ProfileComponent } from './profile/profile.component';
+
+const routes: Routes = [
+  { 
+    path: '',
+	component: UserComponent,
+	children: [
+      {
+		  path: 'login',
+		  component: LoginComponent
+	  },
+	  {
+		  path: 'register',
+		  component: RegisterComponent
+	  },
+	  {
+		  path: 'profile',
+		  component: ProfileComponent
+	  },
+  },
+  
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class UserRoutingModule { }
+
+
+
+-----------(admin-routing.module.ts)-------------
+
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { AdminComponent } from './admin/admin.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SettingsComponent } from './settings/settings.component';
+import { ManageUsersComponent } from './manage-users/manage-users.component';
+
+const routes: Routes = [
+  { 
+    path: '',
+	component: AdminComponent,
+	children: [
+      {
+		  path: 'dashboard',
+		  component: DashboardComponent
+	  },
+	  {
+		  path: 'settings',
+		  component: SettingsComponent
+	  },
+	  {
+		  path: 'manage',
+		  component: ManageUsersComponent
+	  },
+  },
+  
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class AdminRoutingModule { }
+
+
+-------------(app.component.html)---------------
+<ul>
+	<li><a routerLink="/">Home</a></li>
+	<li><a routerLink="/user">User</a></li>
+	<li><a routerLink="/user/login">Login</a></li>
+	<li><a routerLink="/user/register">Register</a></li>
+	<li><a routerLink="/user/profile">Profile</a></li>
+	<hr/>
+	<li><a routerLink="/admin">Admin</a></li>
+	<li><a routerLink="/admin/dashboard">Dashboard</a></li>
+	<li><a routerLink="/admin/settings">Settings</a></li>
+	<li><a routerLink="/admin/manage">Manage Users</a></li>
+</ul>
+<hr/>
+<router-outlet></router-outlet>
+============================================================================
+
+?>
+RxJS 5  
+<?php 
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+?>
+
+RxJS 6
+<?php
+import { Observable, Subject } from 'rxjs';
+?>
+===================================================================================
+Observable 
+
+
+===========================================================================
+~Subject
+<?php 
+- Observable is unicast and Subject is multicast.
+The second super power of subjects is that they support multiple subscriptions. In other words, they are multicast.
+
+- An RxJS Subject is a special type of Observable that allows values to be multicasted to many Observers. 
+
+- To feed a new value to the Subject, just call next(theValue), and it will be multicasted to the Observers registered to listen to the Subject.
+
+*************************************************************************
+- Subjects are like EventEmitters: They maintain a registry of many listeners.
+let subject = new Subject<string>();
+
+subject.subscribe((data) => {
+  console.log("Subscriber 1 got data >>>>> "+ data);
+});
+subject.subscribe((data) => {
+  console.log("Subscriber 2 got data >>>>> "+ data);
+});
+
+subject.next("Eureka");
+
+// Console result:
+// Subscriber 1 got data >>>>> Eureka
+// Subscriber 2 got data >>>>> Eureka
+As a result, you can use a Subject in a service to fetch some data, and send the result to all components that subscribed to that Subject.
+**********************************************************************
+
+
+*******************************************************************************8
+We set up service 1, which offers a Subject object.
+The Subject of Service 1 is used in component A to emit an event.
+The Subject of Service 1 is used in component B to listen to the event.
+*********************************************************************************
+
+
+- An observable allows you to subscribe only whereas a subject allows you to both publish and subscribe.
+So a subject allows your services to be used as both a publisher and a subscriber
+
+# Example 1
+
+-------------(backend.service.ts)---------------
+import { Subject } from 'rxjs/Subject';
+
+export class BackendService { 
+	subjectObj = new Subject<any>();	
+	
+	createObservable(){
+		return this.subjectObj.asObservable();
+	}
+}
+
+
+--------------------(footer.component.html)---------------
+
+<input type="text" [(ngModel)] = "val">
+<button (click)="passToSubject(val)">Pass value to parent</button>
+
+
+--------------------(footer.component.ts)---------------Child Comp
+import { BackendService } from './../backend.service';
+
+constructor(private backendService:BackendService) {}
+
+passToSubject(val){
+	this.backendService.subjectObj.next(val);
+}
+
+
+--------------------(app.component.ts)---------------Parent Comp
+
+export class AppComponent{
+	developer : any = ['shubham', 'Jack', 'Mac'];
+	
+	constructor(private backendService:BackendService) {
+		this.backendService.createObservable().subscribe( (data) => {
+				console.log(data);
+				this.developer.push(data);
+		})
+	}
+
+}
+
+
+--------------------(app.component.html)---------------
+<h3 *ngFor = let dev of developer>
+	{{dev}}
+</h3>
+
+# Example 2
+
+-----------------------(src\app\service\message.service.ts)-----------------------
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+@Injectable()
+export class MessageService {
+  public message = new Subject<string>();
+  setMessage(value: string) {
+    this.message.next(value); //it is publishing this value to all the subscribers that have already subscribed to this message
+  }
+}
+
+-------------(home.component.html)------------
+<input type="text" placeholder="Enter message" #message>
+<button type="button" (click)="setMessage(message)" >Send message</button>
+
+#message is the local variable here
+
+---------------------(home.component.ts)----------------------
+import { Component } from '@angular/core';
+import { MessageService } from '../../service/message.service';
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent {
+  constructor(public messageService:MessageService) { }
+  setMessage(event) {
+    console.log(event.value);
+    this.messageService.setMessage(event.value);			//Use this service instance for passing the value of #message to the service function setMessage:
+  }
+}
+
+
+-------------(app.component.html)-------------
+<div *ngIf="message">
+  {{message}}
+</div>
+<app-home></app-home>
+
+
+
+----------------(app.component.ts)---------------
+import { Component, OnDestroy } from '@angular/core';
+import { MessageService } from './service/message.service';
+import { Subscription } from 'rxjs';
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  message: string;
+  subscription: Subscription;
+  constructor(public messageService: MessageService) { }
+  ngOnInit() {
+    this.subscription = this.messageService.message.subscribe(
+      (message) => {
+        this.message = message;
+      }
+    );
+  }
+														//Inside app.component.ts, subscribe and unsubscribe (to prevent memory leaks) to the Subject:
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+}
+
+That’s it.
+Now, any value entered inside #message of home.component.html shall be printed to {{message}}inside app.component.html
+?>
+=================================================================================================
+~Behaviour Subject:
+<?php 
+When you subscribe to a behavior subject, it will give you the last emitted value right away.
+**************************************************
+The BehaviorSubject holds the value that needs to be shared with other components.
+Imagine subscribing to a magazine, and right away you receive the latest published issue of it. Wouldn’t that be awesome? Welcome to the world of behavior subjects!
+// Behavior subjects need a first value
+let subject = new BehaviorSubject<string>("First value");
+
+subject.asObservable().subscribe((data) => {
+  console.log("First subscriber got data >>>>> "+ data);
+});
+
+subject.next("Second value")
+
+// Console result:
+// First subscriber got data >>>>> First value
+// First subscriber got data >>>>> Second value
+With behavior subjects, it does not matter when you subscribe, you always get the latest value right away, which can be very useful.
+***************************************************
+
+
+We r create user that r going to share.
+
+Diffrence between subject and behaviorsubject is behaviorsubject support late subscription.
+
+-------------(users.service.ts)---------------
+import { BehaviorSubject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+
+export class UsersService { 
+	private user = new BehaviorSubject<string>('john');
+	//Need to brodcast messages as observable
+	cast = this.user.asObservable();
+	
+	constructor() { }
+	
+	editUser(newUser){
+		this.user.next(newUser);	//Basically replaces the value of the user
+	}
+	
+}
+
+-------------(one.component.ts)---------------
+import { UserService } from '../../services/users.service';
+
+export class ManageBlogsComponent implements OnInit {
+	user:string;
+	editUser:string;
+	constructor(private usersService: UsersService){}
+	
+	ngOnInit() {
+		this.usersService.cast.subscribe(user => this.user = user)
+	}
+	
+	editTheUser(){
+		this.usersService.editUser(this.editUser);
+	}
+}
+
+---------------(one.component.html)----------------
+<h2>one : {{user}}</h2>
+<input type="text" [(ngModel)] = "editUser">
+<button (click)="editTheUser()">Change</button>
+?>
+
+============================================================================
+Guard
+
+<?php 
+
+
+?>
+==========================================================================
+Angular Bootstrap Process step by step
+<?php 
+main.ts is the main entry point of application.
+?>
+
+===========================================================================
+
+<?php 
+To deal with asyncronous data we either use promises or observable.
+?>
+
+===========================================================================
+
+=> npm install -g json-server
+
+==========================================================================
+(services.component.ts)
+<?php 
+public data;
+public showBiodata = [];
+
+constructor( private biodataService: BioDataService){  }
+
+ngOnInit(){
+	this.biodataService.bioData().subscribe(data => this.showBiodata = data);
+}
+?>
+
+(bio-data.service.ts)
+<?php 
+@Injectable()
+export class BioDataService{
+	constructor(private http: HttpClient){}
+	
+	bioData():Observable<IBiodatas[]>{
+		return this.http.get<IBiodatas[]>('https://jsonplaceholder.typicode')
+	}
+	
+}
+?>
+======================================================================================================
+Pagination
+<?php 
+https://www.javacodegeeks.com/2019/04/angular-pagination-example.html
+https://ciphertrick.com/search-sort-pagination-angular/
+https://code-maze.com/angular-material-table/
+https://stackoverflow.com/questions/40528329/searching-sorting-and-pagination-in-angularjs-2-using-angular-cli
+?>
+
+======================================================================================================
+
+
+~Angular dev build vs prod build
 <?php
 To generate the development build we use "ng build --dev" and for production we use "ng build --prod"
 
@@ -1391,6 +2678,38 @@ Tree Shaking => is the process of removing any code that we are not actually usi
 
 > AOT(Ahead of time) Compilation:  With the Prod Build we get AOT comilation, i.e. the angular component templates are pre-compiled, where as with a development build they are not. 
 ?>
+========================================================================================================
+Material
+<?php 
+# To install angular material
+ng add @angular/material
+
+# app.module.ts
+The app.module.ts is like the Central Processor unit of an angular application. All the components, modules, services, filters and libraries all link to it.
+?>
+
+https://www.encodedna.com/angular/autocomplete-textbox-in-angular-6-using-web-api.htm
+https://codinglatte.com/posts/angular/ng-material-autocomplete-http-lookup/
+
+https://dzone.com/articles/how-to-create-a-multi-field-data-filters-innbspang-1
+https://angularfirebase.com/lessons/multi-property-data-filtering-with-firebase-and-angular-4/
+
+https://www.dotnetcurry.com/angularjs/1438/http-client-angular
+
+https://www.techiediaries.com/angular-httpclient/
+
+https://medium.com/@webteamu/angular-4-third-party-apis-50ad4d18fe2b
+
+https://www.djamware.com/post/5b87894280aca74669894414/angular-6-httpclient-consume-restful-api-example  ----------(good)
+https://codingthesmartway.com/angular-4-3-httpclient-accessing-rest-web-services-with-angular/  ------------(good)
+========================================================================================================
+Employee Management System
+<?php 
+https://overflowjs.com/posts/Angular-8-Understanding-Directory-Structure-and-Creating-CRUD-App
+
+?>
+
+
 
 ng-template
 custom directive
@@ -1403,27 +2722,250 @@ http://www.eduforbetterment.com/sharing-data-with-a-service-in-angular/   ------
 http://www.mukeshkumar.net/articles/angular5/share-data-between-sibling-components-in-angular-5-using-rxjs-behaviorsubject
 
 
+https://www.9lessons.info/2019/05/angular-routing-with-lazy-loading.html?utm_source=feedburner&utm_medium=email&utm_campaign=Feed%3A+9lesson+%289lessons%29
+------------(Good)
+
+=======================================================================================
+
+# Admin
+Create your first website using angular 6 -- Part 10 -- User Dashboard Module
+https://www.youtube.com/watch?v=lYd_z1fvM20
+https://github.com/admister/angular-6-website/tree/master/src/app/pricing
+
+
+========================================================================================
+
+<?php 
+=> npm install bootsrap --save
+?>
+
+=============================================================================================
+
+~Angular reactive forms edit example
+<?php 
+
+-------------------(list-employees.component.html)---------------
+<tbody>
+	<tr *ngFor = "let employee of employees">
+		<td><button (click)="editButtonClick(employee.id)">Edit</button></td>
+	</tr>
+</tbody>
+
+-------------------(list-employees.component.ts)---------------
+import { Router } from '@angular/router';
+import {EmployeeService} from './employee.service';
+
+export class ListEmployeesComponent implements OnInit{
+	
+	constructor (private _employeeService: EmployeeService,private _router: Router){}
+	
+	editButtonClick(employeeId: number){
+		this._router.navigate(['/edit',employeeId]);
+	}
+
+}
+
+-------------------(create-employees.component.ts)---------------
+import { ActivatedRoute } from '@angular/router';
+import {EmployeeService} from './employee.service';
+import {IEmployee} from './employee';
+import {ISkill} from './ISkill';
+
+export class CreateEmployeesComponent implements OnInit{
+	
+	constructor (private fb: FormBuilder,private route: ActivatedRoute, private employeeService: EmployeeService){}
+	
+	ngOnInit(){
+		this.route.paramMap.subscribe(params => {
+			const empId = +params.get('id');
+			if(empId){
+				this.getEmployee(empId);
+			}
+		})
+	}
+	
+	getEmployee(id: number){
+		this.employeeService.getEmployee(id).subscribe();
+	}
+	
+}
+
+-------------------(employee.service.ts)---------------
+
+getEmployee(id: number): Observable<IEmployee>{
+	return this.httpClient.get<IEmployee>(`${this.baseUrl}/${id}`)
+		.pipe(catchError(this.handleError));
+}
+
+private handleError(errorResponse: HttpErrorResponse){
+	if(errorResponse.error instanceof ErrorEvent){
+		console.error('Client Side Error: ', errorResponse.error.message);
+	}else{
+		console.error('Server Side Error: ', errorResponse);
+	}
+	
+	return throwError('There is a problem with the service. We are notified & working on it.')
+}
+
+?>
+
+=========================================================================
+~Async Pipe
+<?php
+
+Angular AsyncPipe subscribes to Observable and returns the emitted data. For example. Let`s suppose we have this method:
+
+getItems(): Observable {
+  this.items$ = this.httpClient.get(this.itemUrl);
+}
+The items$ variable is of type Observable`.
 
 
 
+ we can use the async pipe in the component template to subscribe to the returned Observable:
 
 
+https://www.youtube.com/watch?v=ZjPhSvhABNY
 
+So normally to render the result of a promise or an observable. We have to:
+1) Wait for a callback
+2) Store the result in the variable
+3) Bind to that variable in the template.
 
+But with async pipe we can use promises and observable directly in our template without having to store result on an intermidate property or variable.
 
+By using async pipe we don’t need to perform subscribe function we don’t need to store any intermidate data our component.
+async pipe will keep a track whether the observable is nedded any more. and automatically unsubscibe.
 
+- async pipe makes rendering data from observables and promises easier.
+- For promises automatically calls then.
+- For observable automatically calls subscribe and unsubscibe.
 
+# Example : Without Async Pipe (Promises)
+Class AsyncPipeComponent {
+	promiseData: string; //local variable 
+	
+	construction(){
+		this.getPromise().then(v => this.promiseData =v);
+	}
+	
+	getPromise(){
+		return new Promise((resolve, reject) => {
+			setTimeout(() => resolve("Promise Complete!"),3000);
+		}) 
+	}
+	
+}
 
+<p>{{promiseData}}</p>
 
+# Example : With Async Pipe - Bind to promise directly (Promises)
+Class AsyncPipeComponent {
+	promise: promise<string>; //Ref to the promise itself
+	
+	construction(){
+		this.promise = this.getPromise();		//Don`t subscribe then handler. Store the promise in our promise property
+	}
+	
+	getPromise(){
+		return new Promise((resolve, reject) => {						//Return promise
+			setTimeout(() => resolve("Promise Complete!"),3000);
+		}) 
+	}
+	
+}
 
+<p>{{ promise | async }}</p>
 
+# Example : Without Async Pipe (Observable)
+import {NgModule, Component, OnDestroy} from '@angular/core';
+import {Observable} from 'rxjs/Rx';
 
+Class AsyncPipeComponent implements OnDestroy{
+	
+	observableData: number;
+	subscription: Object = null; //Holds observable subscription itself
+	
+	construction(){
+		this.subscribeObservsle();
+	}
+	
+	subscribeObservsle(){
+		this.subscription = this.getObservable().subscribe(v => this.observableData = v);
+	}
+	
+	getObservable(){
+		return Observable.interval(1000).take(10).map((v) => v * v);
+	}
+	
+	ngOnDestroy(){
+		if(this.subscription){
+			this.subscription.unsubscibe();
+		}
+	}
+	
+}
 
+<p>{{observableData}}</p>
 
+# Example : With Async Pipe (Observable)
 
+import {NgModule, Component, OnDestroy} from '@angular/core';
+import {Observable} from 'rxjs/Rx';
 
+Class AsyncPipeComponent implements OnDestroy{
+	
+	observable: Observable<number>;
+	
+	construction(){
+		this.observable = this.getObservable();
+	}
+	
+	getObservable(){
+		return Observable.interval(1000).take(10).map((v) => v * v);
+	}
+	
+	
+}
 
+<p>{{observable | async }}</p>
 
+# Example : With Async Pipe (Observable)
+
+----------------(app.component.ts)----------------
+export class AppComponent{
+	softBooks:Observable<book[]>;
+	constructor( private bookService: BookService ){}
+	
+	ngOnInit(){
+		this.getsoftBooks();
+	}
+	
+	getsoftBooks(){
+		this.softBooks = this.bookService.getBooksFromStore();
+	}
+	
+}
+
+----------------(app.component.html)----------------
+<ul>
+	<li *ngFor = "let bk of softBooks | async"></li>
+</ul>
+
+?>
+
+==========================================================================
+
+~Observable map():
+<?php 
+The map() operator transforms one value to another. It takes given value from the observable stream and applies the provided transforming function to it.
+# Example 
+favBookName: Observable<string>
+
+getBookName(){
+	this.favBookName = this.bookService.getFavBookFromStore(101).map(book => book.name);
+}
+?>
 
 
 
@@ -1550,6 +3092,23 @@ https://blog.mgechev.com/2016/07/05/using-stripe-payment-with-angular-2/
 admin
 
 https://codecanyon.net/item/ekattor-school-management-system-pro/6087521?s_rank=5
+
+
+
+
+---------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
