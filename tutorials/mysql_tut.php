@@ -1,13 +1,60 @@
-primary key vs unique key in SQL:
+~MyISAM AND InnoDB
+~primary key vs unique key in SQL
+~Mysql Join
+~MySQL ON DELETE CASCADE Example
+~MySQL LIMIT clause
+~How to concatenate columns in MySql
+*****************************************
+
+
+
+~MyISAM AND InnoDB
+<?php 
+# MyISAM
+- The MyISAM tables are not transaction-safe.
+- Provides high-speed storage and retrieval, supports full text searching.
+- MyISAM provides table-level locking.
+- MYISAM occupies less memory sapce for tables rather than
+InnoDB tables.
+
+# InnoDB
+- The InnoDB tables fully support ACID-compliant and transactions.
+- Supports FOREIGN KEY referential-integrity constraints. It supports commit, rollback, and crash-recovery capabilities to protect data.
+- Row level locking.
+
+# What is transaction safe?
+When an update is performed and it fails, all changes are reverted.
+
+# Locking 
+MYISAM provide the table level locking means if the data in one table has been modified by the other 
+table ,the entire table will lock for the next process.
+But INNODB provide the row level locking only the row of the 
+table that is being updated is locked.
+?>
+
+
+~primary key vs unique key in SQL
 <?php
-primary key and unique key used to uniquely identify a row in a table. Both primary key and unique key can identify a row uniquely but there are some subtle difference between them.
+primary key and unique key used to uniquely identify a row in a table. But there are some subtle difference between them.
 1) Unique key in a table can be null
 2) There can be only one primary key per table in relation database e.g. MySQL,
 but there can be more than one unique key per table.
 ?>
 ===================================================================
-Mysql Join
+~Mysql Join
 <?php
+CREATE TABLE `course` (
+	`id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+	`name` varchar(50) NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+id	name
+1	HTML5
+2	CSS3
+3	JavaScript
+4	PHP
+5	MySQL
 
 CREATE TABLE `user` (
 	`id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -23,18 +70,7 @@ id	name	 course
 4	David	   5
 5	Emma	  (NULL)
 
-CREATE TABLE `course` (
-	`id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-	`name` varchar(50) NOT NULL,
-	PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
 
-id	name
-1	HTML5
-2	CSS3
-3	JavaScript
-4	PHP
-5	MySQL
 
 Since we’re using InnoDB tables and know that user.course and course.id are related, we can specify a foreign key relationship:
 
@@ -127,10 +163,9 @@ Emma	    (NULL)
 ?>
 ===================================================================
 
-MySQL ON DELETE CASCADE Example
+~MySQL ON DELETE CASCADE Example
 
 <?php 
-Let’s take a look at an example of using MySQL ON DELETE CASCADE .
 
 We have two tables named buildings and rooms . Each building has one or more rooms. However, each room belongs to only one building. A room would not exist without a building.
 
@@ -143,10 +178,7 @@ When we delete a record from the buildings table, we want the records in the roo
 
 DELETE FROM buildings
 WHERE building_no = 2;
-1
-2
-DELETE FROM buildings
-WHERE building_no = 2;
+
 We want the records in the rooms table associated with the building number 2 to be removed as well.
 
 The following are steps that demonstrate how MySQL ON DELETE CASCADE  referential action works.
@@ -202,7 +234,7 @@ Notice that ON DELETE CASCADE  works only with tables whose storage engines supp
 ?>
 ===================================================================
 
-MySQL LIMIT clause:
+~MySQL LIMIT clause:
 <?php
 The LIMIT clause accepts one or two arguments. The values of both arguments must be zero or positive integers.
 
@@ -215,7 +247,7 @@ The count specifies the maximum number of rows to return.
 ?>
 ==================================================================
 
-How to concatenate columns in MySql
+~How to concatenate columns in MySql
 <?php
 To concatenate columns in MySql there is in-built function for that.
 (id)	(firstname)		(lastname)
@@ -225,7 +257,7 @@ To concatenate columns in MySql there is in-built function for that.
 => SELECT concat(firstname,' ',lastname) as user_name FROM users;
 
 o/p => 
-(user_name
+(user_name)
 John Doe
 John Smith
 
@@ -477,6 +509,10 @@ Examples :
 
 2nd highest salary in MySQL without subquery:
 SELECT salary FROM Employee ORDER BY salary DESC LIMIT 1,1
+OR
+SELECT MAX(salary) FROM Employee WHERE Salary NOT IN ( SELECT Max(Salary) FROM Employee);
+OR
+SELECT MAX(Salary) From Employee WHERE Salary < ( SELECT Max(Salary) FROM Employee);
 
 3rd highest salary in MySQL using LIMIT clause:
 SELECT salary FROM Employee ORDER BY salary DESC LIMIT 2,1
@@ -495,7 +531,7 @@ DCL:- DCL stand for Data Control Language.Its contain commands like GRANT,Revoke
 
 # VIEW in Mysql
 <?php
-In simple language , Views are nothing but virtual tables and do not contain data in itself but display data stored in other tables. Views can be used for data abstraction i.e. to hide complexity of underlying table. 
+In simple language , Views are nothing but virtual tables and do not contain data in itself but display data stored in other tables.
 
 ADVANTAGES OF VIEWS:
 Join two or more tables and show its outcome as single table to end user (i.e. hiding complexity of your data and tables).
@@ -515,7 +551,7 @@ ON product.product_id = brand.brand_id
 
 Index
 <?php
-Indexes are used to retrieve data from the database very fast. The users cannot see the indexes, they are just used to speed up searches/queries.
+Indexes are used to retrieve data from the database very fast. 
 INDEX`s are created on the column(s) that will be used to filter the data.
 
 # Note: Updating a table with indexes takes more time than updating a table without (because the indexes also need an update). So, only create indexes on columns that will be frequently searched against.
@@ -561,10 +597,23 @@ As you can see, MySQL just had to locate 17 rows from the  jobTitle index as ind
 SHOW INDEXES FROM employees;	
 
 # DROP INDEX `index_id` ON `table_name`;
+
+------------------------------------------
+# Create Index
+CREATE INDEX person_first_name_idx
+ON person (first_name)
+
+# Multi Column INDEX
+CREATE INDEX person_first_name_last_name_idx 
+ON person (first_name, last_name)
+
+https://www.youtube.com/watch?v=fsG1XaZEa78
+Indexes in SQL are used to speed up SQL queries.  A database index works much like an index in a book.  For example, if you have a database table with a list of people, a common query would be to lookup someone by name.  Creating an index means the database will not have to scan the entire table looking for matches.  Instead, it will restrict its search to a small portion of the rows.
+
 ?>
 ============================================================================
 
-Trigger
+~Trigger
 <?php 
 A SQL trigger is a set of  SQL statements stored in the database catalog. It is run just before or just after an INSERT, UPDATE or DELETE event occurs on a particular database table.
 
@@ -684,15 +733,141 @@ Virat 	Vina
 
 ?>
 
+=======================================================================================
+~Difference between timestamp and datetime.
+<?php 
+# Range
+The supported range for DATETIME type is ‘1000-01-01 00:00:00’ to ‘9999-12-31 23:59:59’.
+The supported range for TIMESTAMP type is ‘1970-01-01 00:00:01’ UTC to ‘2038-01-19 03:14:07’ UTC.
+
+That means if you want to store date which is before the year 1970 or after the year 2038 you will need to use DATETIME.
+
+# Size
+Datetime requires 5 bytes along with 3 additional bytes for fractional seconds’ data storing. On the other hand, timestamp datatype requires 4 bytes along with 3 additional bytes for fractional seconds’ data storing.
+
+# Indexing
+Indexing can be done on timestamp data but datetime data cannot be indexed.
+?>
+
+=======================================================================================
+~Set Operator UNION and UNION ALL
+<?php 
+Union operator is used to combine two or more result sets into single result set. By default, Union operator removes duplicate rows( Use UNION ALL operator to retain duplicate rows) 
+
+# RULES:
+1. Number and orders of the column must be same.
+2. Data type of the column must be same. 
+?>
 
 
+https://www.youtube.com/watch?v=aNyATXKNf0Q
 
+=========================================================================================
+~Cross Join
+<?php 
+- It`s also called as Cartesian Product.
+- In this all the records of first table comes with all the records of second table.
+- In this condition(Where) is not used.
 
+SELECT * FROM TABLE1, TABLE2;
+?>
+==========================================================================================
+~Relationship
+<?php 
+# One To One Relationship
+Example 1: Person => Movie Ticket
+A person has movie ticket.
 
+Example 2: User => Passport
+Example 3: Person => Driving License
+Example 4: Person => Contact Number
 
+# One To Many Relationship
+1. A student has multiple email Ids
+2. A Teacher teaches multiple students
+3. A Person has multiple phone numbers
+4. A Post has multiple comments
 
+# Many To Many Realtionship
+1. One author could publish many Books and any Book could be written by many Authors.
 
+-----(author)------
+author_id
+author_name
 
+-----(book)------
+book_id
+book_name
 
+-----(author_book)-----
+author_id
+book_id
+
+2. A student can be enrolled in multiple classes at a time (for example, they may have three or four classes per semester).
+A class can have many students (for example, there may be 20 students in one class).
+
+Student ID	Class ID
+1			3
+1			5
+1			9
+2			1
+2			4
+2			5
+2			9
+
+Student ID	Student name
+1			John
+2			Debbie
+
+Class ID	Class name
+1			English
+2			Maths
+3			Spanish
+4			Biology
+5			Science
+6			Programming
+7			Law
+8			Commerce
+9			Physical Education
 
 ?>
+
+Group_CONCAT() Function
+<?php
+Used to concatenate data from multiple rows into one field. This is an aggregate (GROUP BY) function which returns a String value, if the group contains at least one non-NULL value. Otherwise, it returns NULL.
+ 
+EMP_ID	FNAME	LNAME	DEPT_ID		STRENGTH
+	1	mukesh	gupta	2			Leadership
+	3	neelam	sharma	3			Hard-working
+	1	mukesh	gupta	2			Responsible
+	2	devesh	tyagi	2			Punctuality
+	3	neelam	sharma	3			Self-motivated
+	1	mukesh	gupta	2			Quick-learner
+	4	keshav	singhal	3			Listening
+	2	devesh	tyagi	2			Quick-learner
+	5	tanya	jain	1			Hard-working
+	4	keshav	singhal	3			Critical thinking
+	5	tanya	jain	1			Goal-oriented
+	
+SELECT emp_id, fname, lname, dept_id, 
+GROUP_CONCAT ( strength ) as "strengths" 
+FROM employee group by emp_id;	
+	
+EMP_ID	FNAME	LNAME	DEPT_ID		STRENGTHS
+	1	mukesh	gupta	2			Leadership, Resposible, Quick-learner
+	2	devesh	tyagi	2			Punctuality, Quick-learner
+	3	neelam	sharma	3			Hard-working, Self-motivated
+	4	keshav	singhal	3			Listening, Critical thinking
+	5	tanya	jain	1			Hard-working, Goal-oriented	
+	
+SELECT dept_id, 
+GROUP_CONCAT ( DISTINCT strength) 
+as "employees strengths"  
+from employee group by dept_id;	
+
+DEPT_ID	EMPLOYEES STRENGTHS
+1		Goal-oriented, Hard-working
+2		Leadership, Punctuality, Quick-learner, Responsible
+3		Critical thinking, Hard-working, Listening, Self-motivated
+	
+	

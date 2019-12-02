@@ -19,7 +19,7 @@ No buffering
 
 The following are the key areas where Node.js is widely used:
 
-I/O-bound applications
+I/O-bound applications(non-blocking I/O model)
 Data streaming applications
 Data-intensive real-time applications (DIRT)
 JSON API-based applications
@@ -434,6 +434,7 @@ app.listen(3000, function(){
 
 ===================================================================================
 								EXPRESS
+								npm install express --save   //--save store in local directory
 ===================================================================================
 # Define routes
 <?php 
@@ -853,7 +854,29 @@ io.attach(Server);
 
 ?>
 
+=========================================================================================
+# Serving static files in Express
 
+To serve static files such as images, CSS files, and JavaScript files, use the express.static built-in middleware function in Express.
+
+The function signature is:
+
+express.static(root, [options])
+
+The root argument specifies the root directory from which to serve static assets.
+
+For example, use the following code to serve images, CSS files, and JavaScript files in a directory named public:
+
+app.use(express.static('public'))
+Now, you can load the files that are in the public directory:
+
+http://localhost:3000/images/kitten.jpg
+http://localhost:3000/css/style.css
+http://localhost:3000/js/app.js
+http://localhost:3000/images/bg.png
+http://localhost:3000/hello.html
+
+######################################################################################33
 
 
 
@@ -905,10 +928,59 @@ https://github.com/CodAffection/Node.js-Expess-MongoDB-CRUD
 
 MEAN Stack CRUD Operations - MEAN Stack Beginners Tutorial  ------------(Good 08apr2018)
 https://www.youtube.com/watch?v=UYh6EvpQquw
+https://github.com/CodAffection/MEAN-Stack-CRUD-Operations
 
-Nodejs and Expressjs [A Developer's Guide] - Modular Routing #4
+Nodejs and Expressjs [A Developer`s Guide] - Modular Routing #4
 
 CodAffection
 •
 61K views
 
+https://codeforgeek.com/how-to-write-custom-middleware-for-expressjs/
+https://codeforgeek.com/render-html-file-expressjs/
+https://codeforgeek.com/manage-session-using-node-js-express-4/
+
+# Cab booking project flow
+https://www.youtube.com/watch?v=Hdv9xvtbci4  -------------(Good project description)
+
+# Learning MEAN Stack by Building Real world Application
+https://www.youtube.com/watch?v=SD9cS_6O4zg&feature=youtu.be&t=7508   ---------------(Good)
+
+
+https://prod.packtpub.com/in//web-development/real-world-projects-mean-stack-video
+https://github.com/PacktPublishing/Real-World-Projects-with-MEAN-Stack
+
+https://www.fiverr.com/gigs/mean-stack
+
+https://medium.mybridge.co/node-js-top-10-open-source-projects-for-the-past-month-v-mar-2018-6047fc05b1bb
+
+Angular Employee Payroll, Salary App Free download with Source Code
+https://www.youtube.com/watch?v=sWOXETusJNw   -----------(Good)
+https://github.com/AmitXShukla/Employee-Payroll-Salary-App-Angular-6-MEAN-Stack/tree/master/Server
+
+
+https://www.udemy.com/real-world-projects-with-mean-stack/
+https://www.udemy.com/filemaker-bookings-and-reservation-system/
+https://www.udemy.com/mean-project-with-angular-4-creating-a-cms/
+https://www.udemy.com/learning-mean-stack-by-building-real-world-application/
+
+Traversy Media
+https://www.youtube.com/watch?v=DQ9pZ2NKXRo&list=PLillGF-RfqbZMNtaOXJQiDebNXjVapWPZ&index=2 ---------------(Good)
+
+MEAN Stack User Registration Using Node JS - Part 1
+https://www.youtube.com/watch?v=m34FCkBd7UU   ---------------(Good)
+
+=======================================================================================
+
+# Chat Application 
+
+https://codecanyon.net/item/chat-application-codeigniter-socketio-nodejs/20061969
+
+https://techalltype.com/myblog/real-time-notification-using-socket-io-in-codeigniter/
+
+
+
+https://www.udemy.com/real-world-projects-with-mean-stack/
+---------------(Good)
+https://www.udemy.com/mean-project-with-angular-4-creating-a-cms/
+https://www.udemy.com/angular-2-and-nodejs-the-practical-guide/

@@ -11,7 +11,7 @@ Database: Query Builder in Laravel | use DB
 Alternatively, you may also install Laravel by issuing the Composer create-project command in your terminal:
 
 composer create-project --prefer-dist laravel/laravel blog "5.3.*"
-
+composer create-project --prefer-dist laravel/laravel larvtest
 
 # php artisan serve
 
@@ -217,13 +217,19 @@ And apache rewrite mode must be on.
 
 ?>
 
-Middlewares
+~Middlewares
 <?php
+Middleware provide a convenient mechanism for filtering HTTP requests entering your application. For example, Laravel includes a middleware that verifies the user of your application is authenticated. If the user is not authenticated, the middleware will redirect the user to the login screen.
+
+There are two types of Middleware in Laravel.The Global Middleware will run on every HTTP request of the application, whereas the Route Middleware will be assigned to a specific route.
+
 Firtly Middlewares need to registered in kernel.php
 one kernel.php exits inside Http folder and another one is console folder.
 
 (app/Http/kernel.php)
 protected $middleware[] ,it is global middleware, it will run on every request.
+
+All of these middleware are located in the app/Http/Middleware directory.
 
 # Create middleware using cli
 php artisan make:middleware LoggerMiddleware
@@ -240,6 +246,11 @@ public function handle($request, Closure $next)
 	Log::info("Log entry from LoggerMiddleware");
 	return $next($request);
 }
+
+# Uses of middleware:
+- A CORS middleware might be responsible for adding the proper headers to all responses leaving your application.
+- A logging middleware might log all incoming requests to your application.
+- Authentication 
 
 # Another option to define middleware:
 Route::controller('admin-panel',[
@@ -282,7 +293,12 @@ public function __construct()
 
 ?>
 
-Dependency Injection
+~Facades
+<?php 
+
+?>
+
+~Dependency Injection
 <?php
 *******************************************
 # Create Controller using command prompt
@@ -1305,14 +1321,6 @@ public function formSubmit( TestRequest $request){
 	
 }
 
-
-# In some cases what happend if $request object is not available
-public function dashboard(Request $request){
-	$request->session()->put();
-	return view('child');
-}
-
-# Use session without dependency injection.
 public function dashboard(Request $request){
 	session()->put('data','Some data on session');
 	return view('child');
@@ -2508,7 +2516,7 @@ class HtmlController extends Controller
 Migration in laravel
 <?php 
 # What is migration
-Migration are like version control for your database, allowing yout team to easily modify and share the applications database schema.
+Migration are like version control for your database, allowing your team to easily modify and share the applications database schema.
 
 php artisan help make:migration
 
@@ -4564,23 +4572,282 @@ For example : If you are an individual developer working on a project which must
 If you are an big team. You going to build some commercial website
 ?>
 
+LARAVEL
+<?php 
+Laravel is a free open-source PHP web framework. It is created by Taylor Otwell and allows developers to write expressive, elegant syntax. Laravel comes with built-in support for user authentication and authorization which is missing in some most popular PHP frameworks like CodeIgniter, CakePHP.
+
+- Laravel is developed on the MVC (Model-View-Controller) design pattern.
+- Comes with inbuilt features/ modules like authentication, authorization, localization, models, views, sessions, paginations and routing
+- Supports advanced concepts of PHP and OOPs like Dependency Injection, traits, Contracts, bundles, Namespaces, Facades
+- Supports Multiple Databases like MySQL, PostgreSQL, SQLite, SQL Server.
+- Allow developers to write clean and modular code.
+- Supports blade Template Engine
+- Comes with Official Packages like Cashier, Envoy, Horizon, Passport, Scout, Socialite
+- Used with various popular Javascript Frameworks Like AngularJs, VueJs, ReactJS.
+?>
+
+How can we turn off CRSF protection for a particular route?
+<?php 
+We can add that particular URL or Route in $except variable. It is present in the 
+app\Http\Middleware\VerifyCsrfToken.php file.
+
+Example
+                                                
+class VerifyCsrfToken extends BaseVerifier {
+	protected $except = [
+		'Pass here your URL',
+	];
+}
+?>
+What is the difference between {{ $username }} and {!! $username !!} in Laravel?
+<?php 
+{{ $username }} is simply used to display text contents but {!! $username !!} is used to display content with HTML tags if exists.
+?>
+
+How to use session in laravel?
+<?php 
+1. Retrieving Data from session
+session()->get('key');
+
+2. Retrieving All session data
+session()->all();
+
+3. Remove data from session
+session()->forget('key'); or session()->flush();
+
+4. Storing Data in session
+session()->put('key', 'value');
+?>
+
+How to remove /public from URL in laravel?
+<?php
+
+
+
+?>
+
+How we can upload files in laravel? Explain
+<?php 
+We have to call Facades in our controller file with this :
+use Illuminate\Support\Facades\Storage;
+
+Example
+                                                
+if($request->hasFile('file_name')) {
+
+      $file = Storage::putFile('YOUR FOLDER PATH', $request->file('file_name'));
+
+}
+?>
+
+What is Eloquent ORM in Laravel?
+<?php
+An ORM stands for object-relational mapper. It is essential features provided by Laravel Framework. Laravel allows us to work with database objects and relationships using an eloquent. Each table has a particular Model which are used to interact with that table in laravel application.
+
+It has many types of relationships.
+> One To One relationships
+> One To Many relationships
+> Many To Many relationships
+> Has Many Through relationships
+> Polymorphic relationships
+> Many To Many Polymorphic relationships
+?>
+
+How to clear complete cache in Laravel?
+<?php 
+> php artisan config:clear
+> php artisan cache:clear
+> composer dump-autoload
+> php artisan view:clear
+> php artisan route:clear
+?>
+
+What is the use of Accessors and Mutators in Eloquent ?
+<?php 
+Laravel accessors and mutators are customs, user-defined methods that allow you to format Eloquent attributes. Accessors are used to format attributes when you retrieve them from the database.
+
+1. Defining an accessor
+The syntax of an accessor is where getNameAttribute() Name is capitalized attribute you want to access.
+
+public function getNameAttribute($value)
+{
+    return ucfirst($value);
+}
+
+2. Defining a mutator
+Mutators format the attributes before saving them to the database.
+
+The syntax of a mutator function is where setNameAttribute() Name is a camel-cased column you want to access. So, once again, let’s use our Name column, but this time we want to make a change before saving it to the database:
+
+public function setNameAttribute($value)
+{
+    $this->attributes['name'] = ucfirst($value);
+}
+?>
+
+What is lumen?
+<?php 
+developing Laravel based microservices and fast APIs.
+?>
+
+How to extend a layout file in laravel view?
+<?php 
+With this @extends('layouts.master') we can extend this master layout in any view file.
+
+In this example layouts is a folder that is placed in resources/views available and the master file will be there. Now "master.blade.php" is a layout file.
+?>
+
+How to pass multiple variables by controller to blade file?
+<?php
+$valiable1 = 'Best';
+
+$valiable2 = 'Interview';
+
+$valiable3 = 'Question';
+
+return view('frontend.index', compact('valiable1', 'valiable2', 'valiable3'));
+
+In you View File use can display by {{ $valiable1 }} or {{ $valiable2 }} or {{ $valiable3 }}
+
+?>
+
+Is Laravel support caching? Explain
+<?php
+Yes, It supports caching like Memcached and Redis. By default, laravel is configured with file cache which is stores the serialized, cached objects in the files. Normally we can use Memcached or Redis for large projects.
+
+# 3 Best Laravel Redis examples to make your site load faster
+https://www.itechempires.com/2018/06/examples-of-using-redis-with-laravel-framework/
+https://tuts.codingo.me/improve-site-loading-speed-using-redis	------------(G)
+
+https://laracasts.com/series/learn-laravel-and-redis-through-examples
+https://www.cloudways.com/blog/redis-for-queuing-in-laravel-5/
+
+# Redis
+Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.
+Before using Redis, we need to install and start redis server.
+
+Caching or storing frequently accessed data in memory is one of the proven ways to improve site speed.
+Installing Redis cache on Laravel really helps to speed up your web app.
+
+Redis is a storage server that persists your data in memory which makes read & write operations very fast, you can also configure it to store the data on disk occasionally, replicate to secondary nodes, and automatically split the data across multiple nodes.
+That said, you might want to use Redis when fast access to your data is necessary (caching, live analytics, queue system, etc...),
+# Use Case
+Think of a cloud-based Point Of Sale application for restaurants, as owner it`s extremely important to be able to monitor different statistics related to sales, inventory, performance of different branches, and many other metrics. Let`s focus on one particular metric which is Product Sales, as a developer you want to build a dashboard where the restaurant owner can see live updates on what products have more sales throughout the day.
+
+select SUM(order_products.price), products.name
+from order_products
+join products on order_products.product_id = products.id
+where DATE(order_products.created_at) = CURDATE()
+where order_products.status = "done"
+
+The sql query above will bring you a list with the sales each product made throughout the day, but it`s a relatively heavy query to run when the restaurant serves thousands of orders every day, simply put you can`t run this query in a live-updates dashboard that pulls for updates every 60 seconds or something, it`d be cool if you can cache the product sales every time an order is served and be able to read from the cache.
+
+# Another Use Case
+Now you want to know the number of unique visitors opening your website every day, we might store it in SQL having a table with user_id & date fields, and later on we can just run a query like:
+
+
+# IMP 
+(1) Before using Redis with Laravel, you will need to install the predis/predis package (~1.0) via Composer. To do that, type the following command in terminal
+composer require predis/predis
+
+(2) The Redis configuration for your application is located in the config/database.php file
+'redis' => [
+   'client' => 'predis',
+   'default' => [
+       'host' => env('REDIS_HOST', 'localhost'),
+       'password' => env('REDIS_PASSWORD', null),
+       'port' => env('REDIS_PORT', 6379),
+       'database' => 0,
+   ],
+],
+
+In the config/cache.php file, you can change your default cache driver from file to Redis, and start using Redis in your application.
 
 
 
 
+Redis is no sql database structure.
+Predis allow us to work with redis.
+
+# Why use Redis cache?
+Redis gives a structured way to store data in server memory.
+
+1. Fast – Redis is really quick in processing the data in server memory.
+2. Persistence – Redis has persistence of data. After a server crash, it can quickly load data from backup files and put them into server memory.
+3. Messaging support – It has messaging feature and sends real-time notification to active users
+4. Transaction support – Redis can run process one after another, or in other words, it supports queuing of commands
+
+With all these benefits, Redis is the most popular NoSQL database in containers.
+
+Additionally, in Redis, we can set a maximum memory size. Redis will never use more memory than this limit. Also, it gives unused memory back into the memory pool.
+
+# How to install Redis in Laravel?
+1. Setup Redis server
+2. Configure Redis for Laravel
+Next, we need to configure Redis for Laravel. For this, we need to install the predis package.
+composer require predis/predis
+
+
+# Redis vs. Memcached
+- Redis and Memcached are both in-memory data storage systems.
+- Redis supports operations on various data types including strings, hash tables, and linked lists 
+Unlike Memcached which only supports data records of the simple key-value structure, Redis supports much richer data types, including String, Hash, List, Set and Sorted Set. 
+
+https://scaleyourcode.com/blog/article/10  ----------(Good)
+https://just-thor.com/2016/10/using-redis-as-cache-in-laravel/    ----------(Good)
+https://blog.42mate.com/redis-laravel-storing-and-retrieving-objects/
+https://scotch.io/tutorials/caching-in-laravel-with-speed-comparisons
 
 
 
+http://sauravkc.com.np/blog/caching-laravel-site-using-redis
+https://divinglaravel.com/introduction-to-redis
+https://bobcares.com/blog/laravel-install-redis/  ------------(G)
+
+
+https://devcenter.heroku.com/articles/laravel-memcache
+
+
+https://www.w3resource.com/laravel/redis.php  ------------(G)
+https://www.cloudways.com/blog/integrate-laravel-cache/
+https://www.cloudways.com/blog/setup-laravel-redis-cache/
+
+# Just Read
+https://belitsoft.com/laravel-development-services/laravel-cache-and-business-profits
+https://blog.pusher.com/optimizing-performance-laravel/
+
+# Diffrence
+https://www.infoworld.com/article/3063161/why-redis-beats-memcached-for-caching.html
+?>
+
+Eloquent ORM   
+https://hackernoon.com/eloquent-relationships-cheat-sheet-5155498c209
+
+Facades Cache
+Laravel supports popular caching backends like Memcached and Redis.
+
+New Artisan command route: cache to drastically speed up the registration of your ways.
+
+What are the difference between soft delete & delete in Laravel?
+
+
+17:30
+
+Advanced Laravel | Why and How Use Laravel Queue #15
+
+# Singletone
+
+laravel queue example
+https://blog.eduonix.com/web-programming-tutorials/learn-implement-queues-laravel-5/
+https://appdividend.com/2017/12/21/laravel-queues-tutorial-example-scratch/
+https://codebriefly.com/laravel-queues-tutorial/
+https://scotch.io/tutorials/why-laravel-queues-are-awesome#toc-using-the-demo
 
 
 
+# Notification
 
-
-
-
-
-
-
+http://miftyisbored.com/tutorial-email-notifications-laravel-5-3/  -------------(Good)
 
 
 

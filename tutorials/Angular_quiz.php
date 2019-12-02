@@ -560,6 +560,58 @@ if, http://localhost:4200/settings
 it will redirected to http://localhost:4200/settings/profile
 ?>
 
+==========================================================================
+
+~Two way data binding:
+<?php
+Two way data binding is the combination of both Property binding and Event binding.
+using [(ngModel)] directive.
+<input [(ngModel)]='data'>
+
+a.) Without ngModel
+(app.component.html)
+Enter Your Name:<input type="text" [value]='data' (input)='data=$event.target.value'>
+Your Name:{{data}}
+
+(app.component.ts)
+data:string='';
+
+b.) With ngModel
+(app.componenet.ts)
+import {Component, NgModule} from '@angular/core';
+data:string='Shubham';
+
+(app.module.ts)
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+
+
+(app.component.html)
+Enter Your <input [(ngModel)] = 'data'>
+Entered values: HI {{data}}
+
+?>
+
+~Difference between angular js and angular2
+<?php
+Angular 2 is not an upgrade of Angular 1 but it is completely rewritten.
+Angular 2 uses TypeScript which is a superset of JavaScript
+Angular 1.x was not built with mobile support in mind, where Angular 2 is mobile-oriented.
+Angular 2 is entirely component based. Controllers and $scope are no longer used. 
+
+?>
+===========================================================================
 
 ~Angular Forms
 <?php 
@@ -1236,55 +1288,315 @@ export class EmpParent
 
 ?>
 
-~Two way data binding:
-<?php
-Two way data binding is the combination of both Property binding and Event binding.
-using [(ngModel)] directive.
-<input [(ngModel)]='data'>
+===========================================================================
+~Subject
+<?php 
+- Observable is unicast and Subject is multicast.
+The second super power of subjects is that they support multiple subscriptions. In other words, they are multicast.
 
-a.) Without ngModel
-(app.component.html)
-Enter Your Name:<input type="text" [value]='data' (input)='data=$event.target.value'>
-Your Name:{{data}}
+- An RxJS Subject is a special type of Observable that allows values to be multicasted to many Observers. 
 
-(app.component.ts)
-data:string='';
+- To feed a new value to the Subject, just call next(theValue), and it will be multicasted to the Observers registered to listen to the Subject.
 
-b.) With ngModel
-(app.componenet.ts)
-import {Component, NgModule} from '@angular/core';
-data:string='Shubham';
+*************************************************************************
+- Subjects are like EventEmitters: They maintain a registry of many listeners.
+let subject = new Subject<string>();
 
-(app.module.ts)
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-@NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+subject.subscribe((data) => {
+  console.log("Subscriber 1 got data >>>>> "+ data);
+});
+subject.subscribe((data) => {
+  console.log("Subscriber 2 got data >>>>> "+ data);
+});
+
+subject.next("Eureka");
+
+// Console result:
+// Subscriber 1 got data >>>>> Eureka
+// Subscriber 2 got data >>>>> Eureka
+As a result, you can use a Subject in a service to fetch some data, and send the result to all components that subscribed to that Subject.
+**********************************************************************
+
+
+*******************************************************************************8
+We set up service 1, which offers a Subject object.
+The Subject of Service 1 is used in component A to emit an event.
+The Subject of Service 1 is used in component B to listen to the event.
+*********************************************************************************
+
+
+- An observable allows you to subscribe only whereas a subject allows you to both publish and subscribe.
+So a subject allows your services to be used as both a publisher and a subscriber
+
+# Example 1
+
+-------------(backend.service.ts)---------------
+import { Subject } from 'rxjs/Subject';
+
+export class BackendService { 
+	subjectObj = new Subject<any>();	
+	
+	createObservable(){
+		return this.subjectObj.asObservable();
+	}
+}
+
+
+--------------------(footer.component.html)---------------
+
+<input type="text" [(ngModel)] = "val">
+<button (click)="passToSubject(val)">Pass value to parent</button>
+
+
+--------------------(footer.component.ts)---------------Child Comp
+import { BackendService } from './../backend.service';
+
+constructor(private backendService:BackendService) {}
+
+passToSubject(val){
+	this.backendService.subjectObj.next(val);
+}
+
+
+--------------------(app.component.ts)---------------Parent Comp
+
+export class AppComponent{
+	developer : any = ['shubham', 'Jack', 'Mac'];
+	
+	constructor(private backendService:BackendService) {
+		this.backendService.createObservable().subscribe( (data) => {
+				console.log(data);
+				this.developer.push(data);
+		})
+	}
+
+}
+
+
+--------------------(app.component.html)---------------
+<h3 *ngFor = let dev of developer>
+	{{dev}}
+</h3>
+
+# Example 2
+
+-----------------------(src\app\service\message.service.ts)-----------------------
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+@Injectable()
+export class MessageService {
+  public message = new Subject<string>();
+  setMessage(value: string) {
+    this.message.next(value); //it is publishing this value to all the subscribers that have already subscribed to this message
+  }
+}
+
+-------------(home.component.html)------------
+<input type="text" placeholder="Enter message" #message>
+<button type="button" (click)="setMessage(message)" >Send message</button>
+
+#message is the local variable here
+
+---------------------(home.component.ts)----------------------
+import { Component } from '@angular/core';
+import { MessageService } from '../../service/message.service';
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent {
+  constructor(public messageService:MessageService) { }
+  setMessage(event) {
+    console.log(event.value);
+    this.messageService.setMessage(event.value);			//Use this service instance for passing the value of #message to the service function setMessage:
+  }
+}
+
+
+-------------(app.component.html)-------------
+<div *ngIf="message">
+  {{message}}
+</div>
+<app-home></app-home>
+
+
+
+----------------(app.component.ts)---------------
+import { Component, OnDestroy } from '@angular/core';
+import { MessageService } from './service/message.service';
+import { Subscription } from 'rxjs';
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  message: string;
+  subscription: Subscription;
+  constructor(public messageService: MessageService) { }
+  ngOnInit() {
+    this.subscription = this.messageService.message.subscribe(
+      (message) => {
+        this.message = message;
+      }
+    );
+  }
+														//Inside app.component.ts, subscribe and unsubscribe (to prevent memory leaks) to the Subject:
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+}
+
+That’s it.
+Now, any value entered inside #message of home.component.html shall be printed to {{message}}inside app.component.html
+?>
+=================================================================================================
+~Behaviour Subject:
+<?php 
+When you subscribe to a behavior subject, it will give you the last emitted value right away.
+**************************************************
+The BehaviorSubject holds the value that needs to be shared with other components.
+Imagine subscribing to a magazine, and right away you receive the latest published issue of it. Wouldn’t that be awesome? Welcome to the world of behavior subjects!
+// Behavior subjects need a first value
+let subject = new BehaviorSubject<string>("First value");
+
+subject.asObservable().subscribe((data) => {
+  console.log("First subscriber got data >>>>> "+ data);
+});
+
+subject.next("Second value")
+
+// Console result:
+// First subscriber got data >>>>> First value
+// First subscriber got data >>>>> Second value
+With behavior subjects, it does not matter when you subscribe, you always get the latest value right away, which can be very useful.
+***************************************************
+
+
+We r create user that r going to share.
+
+Diffrence between subject and behaviorsubject is behaviorsubject support late subscription.
+
+-------------(users.service.ts)---------------
+import { BehaviorSubject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
 })
 
+export class UsersService { 
+	private user = new BehaviorSubject<string>('john');
+	//Need to brodcast messages as observable
+	cast = this.user.asObservable();
+	
+	constructor() { }
+	
+	editUser(newUser){
+		this.user.next(newUser);	//Basically replaces the value of the user
+	}
+	
+}
 
-(app.component.html)
-Enter Your <input [(ngModel)] = 'data'>
-Entered values: HI {{data}}
+---------------(one.component.html)----------------
+<h2>one : {{user}}</h2>
+<input type="text" [(ngModel)] = "editUser">
+<button (click)="editTheUser()">Change</button>
+
+-------------(one.component.ts)---------------
+import { UserService } from '../../services/users.service';
+
+export class OneComponent implements OnInit {
+	user:string;
+	editUser:string;
+	constructor(private usersService: UsersService){}
+	
+	ngOnInit() {
+		this.usersService.cast.subscribe(user => this.user = user)
+	}
+	
+	editTheUser(){
+		this.usersService.editUser(this.editUser);
+	}
+}
+
 
 ?>
 
-~Difference between angular js and angular2
-<?php
-Angular 2 is not an upgrade of Angular 1 but it is completely rewritten.
-Angular 2 uses TypeScript which is a superset of JavaScript
-Angular 1.x was not built with mobile support in mind, where Angular 2 is mobile-oriented.
-Angular 2 is entirely component based. Controllers and $scope are no longer used. 
+============================================================================
+~ Subject VS BehaviorSubject
+<?php 
+# BehaviourSubject
+A BehaviorSubject holds one value. When it is subscribed it emits the value immediately. A Subject doesn`t hold a value.
+1) example:
+const subject = new Rx.BehaviorSubject();
+subject.next(1);
+subject.subscribe(x => console.log(x));
 
+=> o/p : 1
+
+
+BehaviourSubject will return the initial value or the current value on Subscription
+2) example:
+var subject = new Rx.BehaviorSubject(0);  // 0 is the initial value
+
+subject.subscribe({
+  next: (v) => console.log('observerA: ' + v)  // output initial value, then new values on `next` triggers
+});
+
+subject.next(1);  // output new value 1 for 'observer A'
+subject.next(2);  // output new value 2 for 'observer A', current value 2 for 'Observer B' on subscription
+
+subject.subscribe({
+  next: (v) => console.log('observerB: ' + v)  // output current value 2, then new values on `next` triggers
+});
+
+subject.next(3);
+
+=> o/p : 
+observerA: 0
+observerA: 1
+observerA: 2
+observerB: 2
+observerA: 3
+observerB: 3
+
+
+
+# Subject
+Subject doesnot return the current value on Subscription. It triggers only on .next(value) call and return/output the value
+1) example:
+
+const subject = new Rx.Subject();
+subject.next(1);
+subject.subscribe(x => console.log(x));
+
+=> o/p :
+
+2) example:
+var subject = new Rx.Subject();
+
+subject.next(1); //Subjects will not output this value
+
+subject.subscribe({
+  next: (v) => console.log('observerA: ' + v)
+});
+subject.subscribe({
+  next: (v) => console.log('observerB: ' + v)
+});
+
+subject.next(2);
+subject.next(3);
+
+=> o/p :
+observerA: 2
+observerB: 2
+observerA: 3
+observerB: 3
 ?>
+
+============================================================================
+
+
 
 ~Angular component life cycle hooks
 <?php
@@ -1364,7 +1676,7 @@ export class SimpleComponent implements OnChanges {
 }
 
 ?>
-
+=============================================================================================
 ~Create a Custom Attribute Directive
 <?php 
 # Example 1.
@@ -1920,8 +2232,6 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
     }
 }
 
-=> ng g s Test
-
 Attach extra header for authorization, So interceptors comes in.
 
 ---------------(/opt/lampp/htdocs/angtest/src/app/http-interceptors/index.ts)-----------------
@@ -2059,7 +2369,6 @@ export class AppComponent {
 }
 
 
-Http Requests, Interceptors, Error Handling & more [Angular Series]
 
 =============================================================
 
@@ -2220,6 +2529,8 @@ export class LazyModule { }
 => ng g module admin --flat --routing
 => ng g module user --flat --routing
 
+=> ng g c home --module app
+
 -----------(app-routing.module.ts)-------------
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -2248,6 +2559,10 @@ const routes: Routes = [
 export class AppRoutingModule { }
 
 
+=> ng g c user --module user
+=> ng g c login --module user
+=> ng g c register --module user
+=> ng g c profile --module user
 
 -----------(user-routing.module.ts)-------------
 
@@ -2287,6 +2602,11 @@ const routes: Routes = [
 export class UserRoutingModule { }
 
 
+
+=> ng g c admin --module admin
+=> ng g c dashboard --module admin
+=> ng g c settings --module admin
+=> ng g c mange-user --module admin
 
 -----------(admin-routing.module.ts)-------------
 
@@ -2353,249 +2673,7 @@ RxJS 6
 <?php
 import { Observable, Subject } from 'rxjs';
 ?>
-===================================================================================
-Observable 
 
-
-===========================================================================
-~Subject
-<?php 
-- Observable is unicast and Subject is multicast.
-The second super power of subjects is that they support multiple subscriptions. In other words, they are multicast.
-
-- An RxJS Subject is a special type of Observable that allows values to be multicasted to many Observers. 
-
-- To feed a new value to the Subject, just call next(theValue), and it will be multicasted to the Observers registered to listen to the Subject.
-
-*************************************************************************
-- Subjects are like EventEmitters: They maintain a registry of many listeners.
-let subject = new Subject<string>();
-
-subject.subscribe((data) => {
-  console.log("Subscriber 1 got data >>>>> "+ data);
-});
-subject.subscribe((data) => {
-  console.log("Subscriber 2 got data >>>>> "+ data);
-});
-
-subject.next("Eureka");
-
-// Console result:
-// Subscriber 1 got data >>>>> Eureka
-// Subscriber 2 got data >>>>> Eureka
-As a result, you can use a Subject in a service to fetch some data, and send the result to all components that subscribed to that Subject.
-**********************************************************************
-
-
-*******************************************************************************8
-We set up service 1, which offers a Subject object.
-The Subject of Service 1 is used in component A to emit an event.
-The Subject of Service 1 is used in component B to listen to the event.
-*********************************************************************************
-
-
-- An observable allows you to subscribe only whereas a subject allows you to both publish and subscribe.
-So a subject allows your services to be used as both a publisher and a subscriber
-
-# Example 1
-
--------------(backend.service.ts)---------------
-import { Subject } from 'rxjs/Subject';
-
-export class BackendService { 
-	subjectObj = new Subject<any>();	
-	
-	createObservable(){
-		return this.subjectObj.asObservable();
-	}
-}
-
-
---------------------(footer.component.html)---------------
-
-<input type="text" [(ngModel)] = "val">
-<button (click)="passToSubject(val)">Pass value to parent</button>
-
-
---------------------(footer.component.ts)---------------Child Comp
-import { BackendService } from './../backend.service';
-
-constructor(private backendService:BackendService) {}
-
-passToSubject(val){
-	this.backendService.subjectObj.next(val);
-}
-
-
---------------------(app.component.ts)---------------Parent Comp
-
-export class AppComponent{
-	developer : any = ['shubham', 'Jack', 'Mac'];
-	
-	constructor(private backendService:BackendService) {
-		this.backendService.createObservable().subscribe( (data) => {
-				console.log(data);
-				this.developer.push(data);
-		})
-	}
-
-}
-
-
---------------------(app.component.html)---------------
-<h3 *ngFor = let dev of developer>
-	{{dev}}
-</h3>
-
-# Example 2
-
------------------------(src\app\service\message.service.ts)-----------------------
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-@Injectable()
-export class MessageService {
-  public message = new Subject<string>();
-  setMessage(value: string) {
-    this.message.next(value); //it is publishing this value to all the subscribers that have already subscribed to this message
-  }
-}
-
--------------(home.component.html)------------
-<input type="text" placeholder="Enter message" #message>
-<button type="button" (click)="setMessage(message)" >Send message</button>
-
-#message is the local variable here
-
----------------------(home.component.ts)----------------------
-import { Component } from '@angular/core';
-import { MessageService } from '../../service/message.service';
-@Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
-})
-export class HomeComponent {
-  constructor(public messageService:MessageService) { }
-  setMessage(event) {
-    console.log(event.value);
-    this.messageService.setMessage(event.value);			//Use this service instance for passing the value of #message to the service function setMessage:
-  }
-}
-
-
--------------(app.component.html)-------------
-<div *ngIf="message">
-  {{message}}
-</div>
-<app-home></app-home>
-
-
-
-----------------(app.component.ts)---------------
-import { Component, OnDestroy } from '@angular/core';
-import { MessageService } from './service/message.service';
-import { Subscription } from 'rxjs';
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html'
-})
-export class AppComponent {
-  message: string;
-  subscription: Subscription;
-  constructor(public messageService: MessageService) { }
-  ngOnInit() {
-    this.subscription = this.messageService.message.subscribe(
-      (message) => {
-        this.message = message;
-      }
-    );
-  }
-														//Inside app.component.ts, subscribe and unsubscribe (to prevent memory leaks) to the Subject:
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-}
-
-That’s it.
-Now, any value entered inside #message of home.component.html shall be printed to {{message}}inside app.component.html
-?>
-=================================================================================================
-~Behaviour Subject:
-<?php 
-When you subscribe to a behavior subject, it will give you the last emitted value right away.
-**************************************************
-The BehaviorSubject holds the value that needs to be shared with other components.
-Imagine subscribing to a magazine, and right away you receive the latest published issue of it. Wouldn’t that be awesome? Welcome to the world of behavior subjects!
-// Behavior subjects need a first value
-let subject = new BehaviorSubject<string>("First value");
-
-subject.asObservable().subscribe((data) => {
-  console.log("First subscriber got data >>>>> "+ data);
-});
-
-subject.next("Second value")
-
-// Console result:
-// First subscriber got data >>>>> First value
-// First subscriber got data >>>>> Second value
-With behavior subjects, it does not matter when you subscribe, you always get the latest value right away, which can be very useful.
-***************************************************
-
-
-We r create user that r going to share.
-
-Diffrence between subject and behaviorsubject is behaviorsubject support late subscription.
-
--------------(users.service.ts)---------------
-import { BehaviorSubject } from 'rxjs';
-
-@Injectable({
-  providedIn: 'root'
-})
-
-export class UsersService { 
-	private user = new BehaviorSubject<string>('john');
-	//Need to brodcast messages as observable
-	cast = this.user.asObservable();
-	
-	constructor() { }
-	
-	editUser(newUser){
-		this.user.next(newUser);	//Basically replaces the value of the user
-	}
-	
-}
-
--------------(one.component.ts)---------------
-import { UserService } from '../../services/users.service';
-
-export class ManageBlogsComponent implements OnInit {
-	user:string;
-	editUser:string;
-	constructor(private usersService: UsersService){}
-	
-	ngOnInit() {
-		this.usersService.cast.subscribe(user => this.user = user)
-	}
-	
-	editTheUser(){
-		this.usersService.editUser(this.editUser);
-	}
-}
-
----------------(one.component.html)----------------
-<h2>one : {{user}}</h2>
-<input type="text" [(ngModel)] = "editUser">
-<button (click)="editTheUser()">Change</button>
-?>
-
-============================================================================
-Guard
-
-<?php 
-
-
-?>
 ==========================================================================
 Angular Bootstrap Process step by step
 <?php 

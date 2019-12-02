@@ -1,3 +1,4 @@
+Normalization
 <?php
 
 GOOD FOR MYSQL FUNDA => 
@@ -207,7 +208,7 @@ mysql> select * from category where find_in_set('4',cat_path);
 
 Three matching rows are fetched.
 
-
+===============================================================================================
 # How to concatenate columns in MySql
 
 There are many times you need to concatenate the values of two or more columns while querying the result. To concatenate columns in MySql there is in-built function for that.
@@ -227,7 +228,7 @@ CONCAT_WS to Concatenate Columns with Separator
 select concat_ws(',',firstname,lastname);
 
 It returns the concatenate value of firstname and lastname with comma separated.
-
+===============================================================================================
 
 # IF Condition in MySql:
 
@@ -306,6 +307,7 @@ mysql> select count(status),status from products group by status;
 |             1 | P      |
 +---------------+--------+
 
+===============================================================================================
 
 #  How to Query NULL Value in MySql:
 
@@ -349,7 +351,7 @@ mysql> select * from emp where emp_pan_card IS NOT NULL;
 +----+--------+--------------+
 2 rows in set (0.00 sec)
 
-
+===============================================================================================
 
 # Mysql Join				https://www.sitepoint.com/understanding-sql-joins-mysql-database/
 
@@ -491,7 +493,7 @@ Emma	    (NULL)
 (NULL)	    JavaScript
 (NULL)	    PHP
 
-
+================================================================================================
 
 # Mysql 'BETWEEN' operator :
 
@@ -521,7 +523,7 @@ FROM products
 WHERE buyPrice < 20 OR buyPrice > 100;
 
 
-MySQL BETWEEN with dates example: 
+# MySQL BETWEEN with dates example: 
 
 When you use the BETWEEN operator with date values, to get the best result, you should use the type cast to explicitly convert the type of column or expression to the DATE type.
 
@@ -535,7 +537,7 @@ AND CAST('2003-01-31' AS DATE);
 
 Because the data type of the required date column is DATE so we used the cast operator to convert the literal strings ‘2003-01-01 ‘ and ‘2003-12-31 ‘ to the DATE data type.
 
-
+=========================================================================================
 # MySQL LIMIT clause:
 
 The LIMIT clause accepts one or two arguments. The values of both arguments must be zero or positive integers.
@@ -546,7 +548,7 @@ LIMIT offset , count;
 
 The offset specifies the offset of the first row to return. The offset of the first row is 0, not 1.
 The count specifies the maximum number of rows to return.
-
+==========================================================================================
 
 # primary key vs unique key in SQL:
 
@@ -560,7 +562,7 @@ Transaction in the database is required to protect data and keep it consistent w
 
 http://javarevisited.blogspot.in/2011/11/database-transaction-tutorial-example.html  --------(Very Good)
 
-
+============================================================================================
 
 # Self join
 
@@ -580,6 +582,8 @@ http://www.zentut.com/sql-tutorial/sql-self-join/
 http://www.java67.com/2013/01/difference-between-self-and-equi-join-sql-example-inner-mysql.html
 http://www.w3resource.com/sql/joins/perform-a-self-join.php
 
+===============================================================================================
+
 # Stored Procedures:
 
 It reduces the network traffic and overhead.
@@ -595,7 +599,7 @@ Disadvantage:
 - Doing change in stored procedure directly effect your data so it should always be use with very carefully.
 
 - Stored procedure are set of sql command form our logic so sometime programmer need to debug the stored procedure. In mysql stored procedure it is very hard to debug.
------------------------------------------------------------------------------------------
+=================================================================================================
 # Trigger:
 
 A SQL trigger is a set of  SQL statements stored in the database catalog.is run just before or just after an INSERT, UPDATE or DELETE event occurs on a particular database table.
@@ -626,7 +630,7 @@ SELECT * FROM people;
 | 30  | Josh |
 +--——-+—---—-+
 
--------------------------------------------------------------------------------------------
+==========================================================================================-
 
 # Index
 
@@ -642,6 +646,18 @@ As you can imagine, it’s way faster to search by an index than having to go th
 Every time your web application runs a database query containing a WHERE statement, the database servers job is to look through all the rows in your table to find those that match your request. As the table grows, an increasing number of rows need to be inspected each time.
 
 https://blog.viaduct.io/mysql-indexes-primer/
+
+# Create Index
+CREATE INDEX person_first_name_idx
+ON person (first_name)
+
+# Multi Column INDEX
+CREATE INDEX person_first_name_last_name_idx 
+ON person (first_name, last_name)
+
+https://www.youtube.com/watch?v=fsG1XaZEa78
+Indexes in SQL are used to speed up SQL queries.  A database index works much like an index in a book.  For example, if you have a database table with a list of people, a common query would be to lookup someone by name.  Creating an index means the database will not have to scan the entire table looking for matches.  Instead, it will restrict its search to a small portion of the rows
+==========================================================================================
 
 
 # SQL query to find second maximum salary of Employee
@@ -672,7 +688,7 @@ WHERE Salary = (SELECT Max(Salary) FROM Minions)
 
 http://www.w3resource.com/mysql/aggregate-functions-and-grouping/aggregate-functions-and-grouping-group_concat.php
 
-
+===========================================================================================
 
 # ENUM in MySQL
 
@@ -697,7 +713,7 @@ Select * from EMPLOYEE where joining_date >'2013-01-31'
 # Get Joining Date and Time from employee table
 Select CONVERT(DATE_FORMAT(joining_date,'%Y-%m-%d-%H:%i:00'),DATETIME) from EMPLOYEE
 
----------------------------------------------------------------------------------------------------------
+=======================================================================================
 
 # VIEW in Mysql
 
@@ -717,7 +733,7 @@ FRON brand
 INNER JOIN product
 ON product.product_id = brand.brand_id
 
----------------------------------------------------------------------------------------------------------------
+=======================================================================================-
 
 # DDL, DML and DCL ?
 DDL:- DDL stands for Data Definition Language.Its deals with database schemas and descriptions of
@@ -727,7 +743,7 @@ DELETE etc.
 DCL:- DCL stand for Data Control Language.Its contain commands like GRANT,Revoke etc.
 
 
-----------------------------------------------------------------------------------------------------------------
+=======================================================================================
 
 # nth highest salary in MySQL without using subquery as shown below:
 
@@ -737,10 +753,15 @@ Examples :
 
 2nd highest salary in MySQL without subquery:
 SELECT salary FROM Employee ORDER BY salary DESC LIMIT 1,1
+OR
+SELECT MAX(salary) FROM Employee WHERE Salary NOT IN ( SELECT Max(Salary) FROM Employee);
+OR
+SELECT MAX(Salary) From Employee WHERE Salary < ( SELECT Max(Salary) FROM Employee);
 
 3rd highest salary in MySQL using LIMIT clause:
 SELECT salary FROM Employee ORDER BY salary DESC LIMIT 2,1
 
+=======================================================================================
 --------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 
@@ -780,3 +801,245 @@ How To Read And Write A File Using Javascript?
  
 # Get employee details from employee table whose joining year is “2013” 
 => Select * from EMPLOYEE where year(joining_date)='2013'
+
+=======================================================================
+
+# Normalization:
+A technique of organizing the data into multiple related tables, to minimize Data Redundancy.
+
+WHAT IS DATA REDUNDANCY AND WHY SHOULD WE REDUCE IT?
+=> Data redundancy means, repetation of similar data at multiple places. Unnecessary data repetition increase the size of the database.
+
+HOW Normalization SOLVE ALL THESE PROBLEMS?
+=> Normalization bracks the student table into "Student Table" + "Branch Table"
+Normalization reduce the data redundancy and Make the data more meaninigful.
+
+(student_table)
+roll_no	name branch
+
+(branch_table)
+branch hod branch_tel
+
+# 1st Normal Form : 
+Table can be easily extendable and easy to use to retrive the data, It means Scalable Table design which can be easily extended.
+
+Four basic rules:
+- Each column should contain atomic value.
+- A Column should contain values that are of the same type.
+- Each column should have unique name.
+- Order in which data is saved doesn`t matter.
+
+# 2nd Normal Form :
+Criteria :
+- It should be in 1st Normal Form
+- And. It should not have any partial dependencies. 
+
+# 3nd Normal Form :
+Criteria :
+
+=====================================================================================
+# Table design for "Online Store"
+=> items - For storing all selling items.
+=> categories - For categorizing selling items.
+=> statuses - For defining object status.
+=> suppliers - For storing all suppliers.
+=> cutomers - For storing all customers.
+=> orders - For storing all customer orders. 
+
+(items)
+Key 	Coulmn Name 		Definition
+PK		id					INT(10) UNSIGNED NOT NULL AUTO_INCREMENT
+		name				VARCHAR(30) NOT NULL
+		price				FLOAT UNSIGNED NOT NULL
+		in_stock			TINYINT(3) UNSIGNED NOT NULL DEFAULT 0
+FK 		category_id			SMALLINT(5) UNSIGNED NOT NULL DEFAULT 1
+FK		status_id			TINYINT(3) UNSIGNED NOT NULL DEFAULT 1
+FK 		supplier_id			INT(10) UNSIGNED NOT NULL DEFAULT 1
+		created_time		TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		updated_time		TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+(categories)
+Key 	Coulmn Name 		Definition
+PK		id					INT(10) UNSIGNED NOT NULL AUTO_INCREMENT
+		name				VARCHAR(30) NOT NULL
+FK 		parent_id			SMALLINT(5) UNSIGNED NOT NULL DEFAULT 1
+		created_time		TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		updated_time		TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+(statuses)
+Key 	Coulmn Name 		Definition
+PK		id					INT(10) UNSIGNED NOT NULL AUTO_INCREMENT
+		name				VARCHAR(30) NOT NULL
+		created_time		TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		updated_time		TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+(suppliers)
+Key 	Coulmn Name 		Definition
+PK		id					INT(10) UNSIGNED NOT NULL AUTO_INCREMENT
+		name				VARCHAR(30) NOT NULL
+		phone				VARCHAR(20) NOT NULL
+		address				VARCHAR(100) NOT NULL
+		created_time		TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		updated_time		TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+(cutomers)
+Key 	Coulmn Name 		Definition
+PK		id					INT(10) UNSIGNED NOT NULL AUTO_INCREMENT
+		name				VARCHAR(30) NOT NULL
+		email				VARCHAR(50) NOT NULL
+		password			VARCHAR(50) NOT NULL
+		address				VARCHAR(100) NOT NULL
+		created_time		TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		updated_time		TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+(orders)
+Key 	Coulmn Name 		Definition
+PK		id					INT(10) UNSIGNED NOT NULL AUTO_INCREMENT
+		quantities			TINYINT(3) UNSIGNED NOT NULL DEFAULT 1
+		item_id				INT(10) UNSIGNED NOT NULL
+		customer_id			INT(10) UNSIGNED NOT NULL
+		status_id			TINYINT(3) UNSIGNED NOT NULL DEFAULT 4
+		order_time			TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+
+
+https://www.webslesson.info/2016/08/simple-php-mysql-shopping-cart.html
+
+https://github.com/ramortegui/e-commerce-db/blob/master/export/ecommerce-db-db2.sql
+
+https://web-cart.com/documentation/
+
+https://www.codexworld.com/simple-php-shopping-cart-using-sessions/  ------------------------------(Good)
+
+Minimum 4 database tables (products, customers, orders, and order_items) are needed to create a simple session-based shopping cart in PHP with MySQL
+
+CREATE TABLE `products` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+ `description` text COLLATE utf8_unicode_ci NOT NULL,
+ `price` float(10,2) NOT NULL,
+ `created` datetime NOT NULL,
+ `modified` datetime NOT NULL,
+ `status` enum('1','0') COLLATE utf8_unicode_ci NOT NULL DEFAULT '1' COMMENT '1=Active | 0=Inactive',
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `customers` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `first_name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+ `last_name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+ `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+ `phone` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+ `address` text COLLATE utf8_unicode_ci NOT NULL,
+ `created` datetime NOT NULL,
+ `modified` datetime NOT NULL,
+ `status` enum('1','0') COLLATE utf8_unicode_ci NOT NULL DEFAULT '1' COMMENT '1=Active | 0=Inactive',
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE `orders` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `customer_id` int(11) NOT NULL,
+ `grand_total` float(10,2) NOT NULL,
+ `created` datetime NOT NULL,
+ `status` enum('Pending','Completed','Cancelled') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Pending',
+ PRIMARY KEY (`id`),
+ KEY `customer_id` (`customer_id`),
+ CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `order_items` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `order_id` int(11) NOT NULL,
+ `product_id` int(11) NOT NULL,
+ `quantity` int(5) NOT NULL,
+ PRIMARY KEY (`id`),
+ KEY `order_id` (`order_id`),
+ CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+
+https://www.codeofaninja.com/2015/08/simple-php-mysql-shopping-cart-tutorial.html ------------------------------(Good)
+
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(512) NOT NULL,
+  `description` text NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='products that can be added to cart' AUTO_INCREMENT=41 ;
+
+CREATE TABLE IF NOT EXISTS `product_images` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `name` varchar(512) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='image files related to a product' AUTO_INCREMENT=105 ;
+
+CREATE TABLE IF NOT EXISTS `cart_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `quantity` double NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=40 ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

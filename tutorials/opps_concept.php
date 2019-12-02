@@ -382,6 +382,10 @@ Array([0]=>shubham,[1]=>shivam)
 -----------------------------------------------------------------------------------------
 
 # Dependency injection
+If we want to use the code of one class to another class then we need to use dependency injection.
+
+Example 1.
+
 Class ABC{
 	private $xyz;
 	public function __construct($xyz){
@@ -394,13 +398,93 @@ class XYZ {
 
 $xyz = new XYZ();
 $abc = new ABC($xyz);
-------------------------------------------------------------------------------------------
+
+Example 2.  Here, Logger class is the dependency of UserProfile class.
+
+class Logger{
+	public function log($message){
+		echo "Logging message: $message";
+	}
+}
+
+class UserProfile{
+	private $logger;
+	
+	public function createUser(){
+		$this->logger->log("User Created");
+	}
+	
+	public function updateUser(){
+		$this->logger->log("User Updated");
+	}
+	
+	public function __construct(Logger $logger){	//here, we r receiving logger class objectd
+		//$this->logger = new Logger();
+		$this->logger = $logger;		//And assign logger class object to this property.
+	}
+}
+ 
+$logger = new Logger();
+$profile =  new UserProfile($logger);
+$profile->createUser();
+$profile->updateUser();
+
+Example 3.
+
+// Without dependency injection
+class MyService
+{
+    private $myLogger;
+
+    public function __construct()
+    {
+        $this->myLogger = new MyLogger();
+    }
+    //...
+}
+
+// With dependency injection
+class MyService
+{
+    private $myLogger;
+
+    public function __construct(MyLogger $myLogger)
+    {
+        $this->myLogger = $myLogger;
+    }
+    //...
+}
+
+Instead of creating the instance of MyLogger in MyService, it`s created in client code and passed in via constructor.
+========================================================================================================
 
 # Method overriding:
+This method generally used in the case inheritance.
 
 Overriding means is to replace parent class method in child class. or simple technical method changing the behavior of method. In oop overriding is the process by which you can re-declare your parent class method in child class.
 
 Normally method overriding required when your parent class have some method, but in your child class you want the same method with diffrent behavior.
+
+1.) Example 
+
+class ParentClass {
+    public function test($param) {
+        return "\n Parent - the parameter value is $param";
+    }
+}
+class ChildClass extends ParentClass {
+    public function test($param) {
+        echo "\n Child - the parameter value is $param";
+    }
+}
+$objParentClass = new ParentClass;
+$objChildClass = new ChildClass;
+$objParentClass->test('class ParentClass');
+$objChildClass->test('class ChildClass');
+
+o/p => Child - the parameter value is class ChildClass
+------------------------------------------------------------
+2.) Example 
 
 class abc{
 	public function __construct(){
@@ -416,6 +500,8 @@ class xyz extends abc{
 	public function test(){
 		echo "this is test function."
 	}
+	
+}
 
 
 $obj = new xyz;
@@ -425,11 +511,87 @@ O/P=>
 second class constructor.
 this is test function.
 
+--------------------------------------------
+
+3.) Example
+
+class Book {
+	public $name = 'Sarthak';
+	
+	public function author(){
+		return "The author name is: ".$this->name;
+	}
+}
+
+class newBook extends Book {
+	public function author(){
+		return "The author name are: ".$this->name." and Ankur ";
+	}
+}
+
+$book = new newBook();
+echo $book->author();
+
+o/p => The author name are: Sarthak and Ankur 
+
+===================================================================================================
+
 # Method overloading:
 
-In real world overloading means assigning extra work to same machine or person. In oop method overloading is same. By process of method overloading you are asking your method to some extra work. Or in same case we can say some diffrent work also.
+Function overloading is a feature of object oriented programming that allows creating methods with the same name but differ in the type of input parameter.
 
-Normally in opp overloading is managed on the basis of the argument passed in function. we can achieve overloading in oop by providing diffrent argument in same function.
+Overloading in PHP creates properties and methods dynamically. These dynamic properties and method are processes using magic method.
+
+(1.) Example: return fatal error
+
+class text {
+  public function display($parameter1) {
+  echo "Hello world!!";
+
+ }
+public function display($parameter1,$parameter2) {
+echo "Hello India!!";
+  }}
+$obj = new text;
+$obj->display('Hello');       // It will show fatal error
+
+
+Output: 
+Fatal error: Cannot redeclare text::display() 
+
+As from above example we can say that in PHP overloading with same name function can’t be possible. Therefore, with the help of magic function overloading is done in PHP.
+
+Following is an example of overloading with the help of magic methods:
+
+(2.) Example:
+
+class TDshape {
+const Pi = 3.142 ;  // constant value
+ function __call($fname, $argument){
+    if($name == 'area')
+        switch(count($argument)){
+            case 0 : return 0 ;
+            case 1 : return self::Pi * $argument[0] ; // 3.14 * 5
+            case 2 : return $argument[0] * $argument[1];  // 5 * 10
+        }
+
+    }
+
+}
+$circle = new TDshape();
+echo "Area of circle:".$circle->area(5)."</br>"; // display the area of circle
+ $rect = new TDshape();
+echo "Area of rectangle:".$rect->area(5,10); // display area of rectangle
+
+Output :
+
+Area of circle:15.71
+Area of rectangle:50
+
+In the above example __call is a magic method. This method is automatically called behind the scene.
+...................................................
+
+(3.) Example:
 
 class abc{
 	public function __call($method,$parameter){		//Magic method
@@ -472,10 +634,208 @@ display_errors
 
 php_curl
 
+=============================================================================================
 
+# Understanding the ‘self’ keyword in PHP
+In PHP, you use the self keyword to access static properties and methods.
 
+The problem is that you can replace $this->method() with self::method() anywhere, regardless if method() is declared static or not. So which one should you use?
 
+Consider this code:
 
+class ParentClass {
+	function test() {
+		self::who();	// will output 'parent'
+		$this->who();	// will output 'child'
+	}
+
+	function who() {
+		echo 'parent';
+	}
+}
+
+class ChildClass extends ParentClass {
+	function who() {
+		echo 'child';
+	}
+}
+
+$obj = new ChildClass();
+$obj->test();
+
+In this example, self::who() will always output ‘parent’, while $this->who() will depend on what class the object has.
+
+Now we can see that self refers to the class in which it is called, while $this refers to the class of the current object.
+
+So, you should use self only when $this is not available, or when you don’t want to allow descendant classes to overwrite the current method.
+
+=============================================================================================
+
+# Static property and method:
+Static properties and method in php can directly accessible without creating object of class. Like using scope resolution(::) operator. 
+
+class abc{
+	public static $table="login";
+	
+	public static function demo(){
+		echo "This is satic function ".self::$table;
+	}
+}
+
+abc::$table; //For accessing static property without making an object.
+abc::demo();
+
+o/p => This is satic function login
+
+==============================================================================================
+
+# Early Binding and Late Binding:
+
+Early Binding => Binding everything before running or at compile time.
+
+class Book {
+	public $name = 'Sarthak';
+	
+	public function author(){
+		return "The author name is: ".$this->name;
+	}
+}
+
+class newBook extends Book {
+	public function author(){
+		return "The author name are: ".$this->name." and Ankur ";
+	}
+}
+
+$book = new newBook();
+echo $book->author();
+
+o/p => The author name are: Sarthak and Ankur 
+-------------------------------------------------
+Late Binding => Binding everything after compiling.
+
+class Book {
+	public $name = 'Sarthak';
+	
+	public function author(){
+		return "The author name is: ".$this->name;
+	}
+	
+	public function getAuthor(){ //depends upon object
+		echo $this->author();
+	}
+}
+
+class newBook extends Book {
+	public function author(){
+		return "The author name are: ".$this->name." and Ankur ";
+	}
+}
+
+$book = new newBook();
+echo $book->getAuthor();
+
+o/p => The author name are: Sarthak and Ankur 
+
+-------------------------------------------------
+
+class Book {
+	public static $name = 'Sarthak';
+	
+	public static function author(){
+		return "The author name is: ".self::$name;
+	}
+	
+	public function getAuthor(){ //depends upon object
+		echo self::author();
+	}
+}
+
+class newBook extends Book {
+	public static function author(){
+		return "The author name are: ".self::$name." and Ankur ";
+	}
+}
+
+Book::getAuthor();
+echo '<br/>';
+newBook::getAuthor();
+
+o/p => 
+The author name is: Sarthak
+The author name is: Sarthak
+
+=> To solve this problem : It`s the example of late static binding.
+
+class Book {
+	public static $name = 'Sarthak';
+	
+	public static function author(){
+		return "The author name is: ".self::$name;
+	}
+	
+	public function getAuthor(){
+		echo static::author();
+	}
+}
+
+class newBook extends Book {
+	public static function author(){
+		return "The author name are: ".self::$name." and Ankur ";
+	}
+}
+
+Book::getAuthor();
+echo '<br/>';
+newBook::getAuthor();
+
+o/p =>
+The author name is: Sarthak
+The author name are: Sarthak and Ankur
+
+--------------------------------------------------------
+
+=> More Explanation late static binding.
+
+class Model{
+ protected static $tableName = 'Model';
+ public static function getTableName(){
+ return self::$tableName;
+ }
+}
+ 
+class User extends Model{
+ protected static $tableName = 'User'; 
+}
+ 
+echo User::getTableName(); // Model, not User
+
+How it works.
+
+First, we created a Model class that has $tableName static property with value Model and a getTableName() static method that returns the value of the $tableName.  Notice that we used the self and the operator :: to access static property inside the Model class.
+
+Second, we created another class named User that extends the Model class. The User class also has $tableName static attribute.
+
+Third, we called the getTableName() method of the User class. However, it returns Model instead of User. The reason is that self is always resolved to the class in which the method belongs. It means that if you define a method in a parent class and call it from a subclass, the self does not reference to the subclass as we expect.
+To overcome this issue, as of version 5.3, PHP introduced a new feature called PHP static late binding. Basically, instead of using the self, you use the static keyword that references to the exact class that was called at runtime.
+
+Let’s modify our example above:
+ 
+class Model{
+ protected static $tableName = 'Model';
+ public static function getTableName(){
+ return static::$tableName;
+ }
+}
+ 
+class User extends Model{
+ protected static $tableName = 'User'; 
+}
+ 
+echo User::getTableName(); // User
+Now we get the expected result.
+
+Notice that the static:: can only refer to static properties and static methods.
 
 
 

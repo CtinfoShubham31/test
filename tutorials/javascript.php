@@ -184,21 +184,158 @@ null == undefined          // true
 
 
 
+# What are JavaScript Data Types?
+
+Following are the JavaScript Data types:
+
+Number
+String
+Boolean
+Object
+Undefined
+
+===========================================================================
+# How to Send Cross Domain AJAX Request with jQuery
+Cross-domain AJAX request is possible in two ways
+1). Using JSONP
+2). Using CORS (Cross-origin resource sharing)
+
+1).USING JSONP
+We can send cross domain AJAX requests using JSONP. Below is the simple JSONP Request:
+
+$.ajax({
+    url : "http://hayageektest.appspot.com/cross-domain-cors/jsonp.php",
+    dataType:"jsonp",
+});
+ 
+function mycallback(data)
+{
+    alert("Here: "+data.name);
+}
+
+jsonp.php response is:
+mycallback({"name":"Ravishanker","age":32,"location":"India"})
+
+when the JSONP request is successful, mycallback function is called.
+
+If you want the function handling automatically, you can use the below approach. In this case, you need not have any extra function. You can get the server response in success callback
+
+
+$.ajax({
+	url : "http://hayageektest.appspot.com/cross-domain-cors/jsonp.php",
+	dataType:"jsonp",
+	jsonp:"mycallback",
+	success:function(data)
+	{
+		alert("Name:"+data.name+"nage:"+data.age+"nlocation:"+data.location);
+	}
+});
+
+
+jsonp.php source code:
+
+?php 
+
+$callback ='mycallback';
+
+if(isset($_GET['mycallback']))
+{
+	$callback = $_GET['mycallback'];
+}   
+$arr =array();
+$arr['name']="Ravishanker";
+$arr['age']=32; 
+$arr['location']="India";   
+
+echo $callback.'(' . json_encode($arr) . ')';
+
+php?
+
+******
+This works in all the browsers but the problem is: JSONP supports only GET method. POST method is not allowed.
+
+2).USING CORS (CROSS-ORIGIN RESOURCE SHARING)
+Browser does not allow cross domain AJAX requests due to security issues. Cross-domain requests are allowed only if the server specifies same origin security policy.
+Read more about Cross-origin resource sharing (CORS) : Wiki
+
+To enable CORS, You need to specify below HTTP headers in the server.
+Access-Control-Allow-Origin – Name of the domain allowed for cross domain requests. * indicates all domains are allowed.
+Access-Control-Allow-Methods – List of HTTP methods can be used during request.
+Access-Control-Allow-Headers – List of HTTP headers can be used during request.
+
+In PHP, you can use the below code to set the headers.
+
+header('Access-Control-Allow-Origin: *');  
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
+Below the sample code which handles Cross Domain AJAX POST requests: post.php
+
+?php
+header('Access-Control-Allow-Origin: *'); 
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+ 
+$_POST['extra']='POST Request from hayageek.com';
+echo json_encode($_POST);
+?php
+
+CORS works fine in all the latest browsers, but IE8 and IE9 don’t support this.
+
+=============================================================================
+# jQuery - Chaining
+Chaining allows us to run multiple jQuery methods (on the same element) within a single statement.
+
+jQuery Method Chaining:
+Until now we have been writing jQuery statements one at a time (one after the other).
+
+1. EXAMPLE:
+Example chains together the css(), slideUp(), and slideDown() methods. The "p1" element first changes to red, then it slides up, and then it slides down:
+=> $("#p1").css("color", "red").slideUp(2000).slideDown(2000);
+==============================================================================
+
+https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/documentation/documentation-form-repeater.html
+
+https://toolset.com/2017/08/preview-for-nested-repeating-fields-groups/
+
+https://github.com/DubFriend/jquery.repeater
+
+https://wordpress.stackexchange.com/questions/134348/how-do-i-setup-nested-repeatable-option-fields
+https://stackoverflow.com/questions/14616194/jquery-ui-nested-accordion-with-content-in-top-level-accordion?rq=1 ----(ok)
+
+https://www.jquery-az.com/use-jquery-append-add-html-content-examples/  ----(ok)
+
+https://www.sanwebe.com/2013/03/addremove-input-fields-dynamically-with-jquery
+
+https://surveyjs.io/Examples/Library/?id=survey-quiz
+
+https://www.allphptricks.com/add-remove-input-fields-dynamically-using-jquery/
+
+
+https://wordpress.stackexchange.com/questions/134348/how-do-i-setup-nested-repeatable-option-fields
+----(ok)
 
 
 
+https://stackoverflow.com/questions/20215744/how-to-create-a-mysql-hierarchical-recursive-query
+mysql
+
+https://itsolutionstuff.com/post/laravel-5-category-treeview-hierarchical-structure-example-with-demoexample.html
+mysql
+
+http://mikehillyer.com/articles/managing-hierarchical-data-in-mysql/
+mysql
+
+https://phppot.com/php/php-jquery-dynamic-textbox/
+dynamic text box
+
+http://www.infotuts.com/dynamically-add-input-fields-submit-to-database/
+
+http://papermashup.com/dynamically-add-form-inputs-and-submit-using-jquery/
 
 
+http://demo.itsolutionstuff.com/category-tree-view
+laravel category
 
-
-
-
-
-
-
-
-
-
+https://jsfiddle.net/r70wqav7/
 
 
 
